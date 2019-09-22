@@ -194,7 +194,7 @@ function drawBoard(backgroundOnly,
         pointStart += (checkerDiameter + gapBetweenCheckers);
     }
 
-    // draw upper right points
+    // draw lower right points
     pointStart += (barLength + gapBetweenCheckers);
     for (var i=0; i<6; i++) {
         ctx.beginPath();
