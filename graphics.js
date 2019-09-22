@@ -308,7 +308,7 @@ function drawBoard(backgroundOnly,
 	instructions.innerHTML = "";
     } else {
 	if (dice1 > 0) {
-	    instructions.innerHTML = "Move checkers";
+	    instructions.innerHTML = "Enter your move below";
 	    document.getElementById("roll").disabled = true;
 	    document.getElementById("double").disabled = true;
 	    document.getElementById("accept").disabled = true;
