@@ -1,0 +1,46 @@
+<!--
+
+     met.dtd
+
+     by Joern Thyssen <jthyssen@dk.ibm.com>, 2002
+
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+     $Id: met.dtd,v 1.4 2013/08/21 03:45:23 mdpetch Exp $
+
+ -->
+
+
+<!ELEMENT met (info,pre-crawford-table,post-crawford-table+)>
+
+<!ELEMENT info (name,description,length)>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT length (#PCDATA)>
+
+<!ELEMENT pre-crawford-table (row*|parameters)>
+<!ATTLIST pre-crawford-table type CDATA #IMPLIED>
+
+<!ELEMENT post-crawford-table (row|parameters)>
+<!ATTLIST post-crawford-table type CDATA #IMPLIED
+                             player CDATA #IMPLIED>
+
+<!ELEMENT row (me)*>
+
+<!ELEMENT me (#PCDATA)>
+
+<!ELEMENT parameters (parameter*)>
+<!ELEMENT parameter (#PCDATA)>
+<!ATTLIST parameter name CDATA #REQUIRED>

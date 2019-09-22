@@ -1,0 +1,60 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.ad l
+.nh
+.TH BEAROFFDUMP 6 "2006-01-14"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+bearoffdump \- dump a position from the GNU Backgammon bearoff database
+.SH SYNOPSIS
+.B bearoffdump
+.I file id
+.SH DESCRIPTION
+.B bearoffdump
+takes the path to a GNU Backgammon bearoff database and a position number
+and dumps the bearoff information for that position.  It can be called on
+either the one-sided bearoff database, normally
+.IR /usr/share/gnubg/gnubg_os0.bd ;
+or the two-sided bearoff database, normally
+.IR /usr/share/gnubg/gnubg_ts0.bd .
+The output from the former includes the probabilities of bearing off all
+checkers in varying numbers of moves.  The latter only gives the
+probability of winning and doubling cube equity.
+.PP
+The
+.I id
+is difficult to derive if you don't know GNU Backgammon internals.  Each
+possible combinatorial position of checkers and points is assigned a
+position number,
+.I id
+divided by that number is the player position, and
+.I id
+modulo that number is the opponent position.  The number of points and
+checkers is set when building the bearoff database and are shown by
+.B bearoffdump
+when run with any
+.IR id .
+.SH SEE ALSO
+.IR gnubg (6)
+.SH AUTHORS
+Joseph Heled, \[/O]ystein Johansen, J\[/o]rn Thyssen, and Gary Wong,
+with the assistance of many others <bug\-gnubg@gnu.org>.
+.PP
+This manual page was written by Russ Allbery <rra@debian.org>, for the
+Debian GNU/Linux system (but may be used by others).  It may be
+redistributed and/or modified under the terms of version 2 of the GNU
+General Public License as published by the Free Software Foundation (the
+same license as GNU Backgammon).

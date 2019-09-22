@@ -1,0 +1,300 @@
+GNU Backgammon NEWS -- history of user-visible changes.  15 Jan
+
+* Changes in GNU Backgammon 0.14.4
+
+** add functions for importing and exporting board designs.
+
+** coloring of blunders, lucky rolls etc in the game list (controlled by styles
+in gnubg.gtkrc)
+
+** improved chequer movement in GUI (dragging with pick'n'pass)
+
+** right-click context menu with entries for undo move and score sheet
+
+
+* Changes in GNU Backgammon 0.14.3
+
+** fix "bug" in Zadeh match equity table
+
+** Add built-in support for Claes Tornberg's mec 
+
+** Russian translation started
+
+** Interface to relational databases using Python
+
+** New utility program bearoffdump to dump information about databases.
+
+* Changes in GNU Backgammon 0.14.2
+
+** Translations
+*** added Czech
+*** several languages updates. See README for status.
+
+** 3D boards
+*** new quick draw option for computers without accelerated drivers
+
+** Several bug fixes
+
+* Changes in GNU Backgammon 0.14.1
+
+** Rollouts
+*** extendable rollouts
+
+** Bearoff
+*** support for Hugh Sconyers' 15x15 full bearoff database
+
+** 3D boards
+
+** Time controls
+
+** Translations to
+*** English (US) (complete)
+*** German (95% finished)
+*** Italian (90% finished)
+*** Japanese (60% finished)
+*** French (60% finished)
+*** Islandic (25% finished)
+*** Tyrkish (25% finished)
+*** Danish (20% finished)
+
+* Changes in GNU Backgammon 0.14
+
+** general
+*** improved support for Jacoby rule and variants (Nackgammon, Hypergammon, 
+   and cubeless)
+*** new program to generate databases for Hypergammon.
+
+** New dice generator:
+*** read dice from file (similar to Jellyfish)
+*** dice manipulation, e.g., roll the best roll for computer player
+
+** Import
+*** import position files in Snowie .txt format
+   (illegal moves will be imported correctly)
+
+** Export
+*** export positions in Snowie .txt format
+
+** Analysis
+*** option to analyse one side only 
+   (e.g., skip analysis of GNU Backgammons moves)
+*** Sho Sengoku temperature map
+
+
+* Changes in GNU Backgammon 0.13
+
+** swap players
+*** new command "swap players" (also available from the menu Game->Swap Players)
+   that swaps the players. Useful when your match imported from, e.g., 
+   GamesGrid is "upside-down".
+
+** analysis
+*** new command "analyse move" (Analyse->Analyse Move)
+*** analysis of resignations
+*** tutor mode added
+
+** match equity tables are now read from XML files. Allows the user to specify
+   her own favorite MET. 
+
+** Support for "skewed" METs, for example, tables from Jacobs and Trice's
+   fish book.
+   Also, a new command "set invert met on|off" to specify whether the table
+   should be used as entered, or used inverted. For example, the supplied METs
+   from Jacobs and Trice's book are entered with player 0 being the 
+   stronger player.  If the table should be used with player 1 being the 
+   stronger player use: "set invert met on".
+
+** Rollouts:
+*** rollout positions as initial position (i.e., no doubles on first roll).
+*** quasi-random dice added.
+*** simple variance reduction for cubeful rollouts.
+*** statistics (e.g, number of times closed out, cube efficiency etc).
+*** fixed bug in calculations of standard errors.
+*** standard errors are now shown in equity or mwc according to user
+   settings.
+
+** Evaluations
+*** "crashed" neural net added.
+*** much more flexible rollout databases added.
+*** movefilter commands added, to allow user customisation of move pruning.
+*** hint dialog improved.
+
+** Save, Load, Export, and Import
+*** it is now possible to set-up default paths for saving, loading, 
+   export, and import of matches and games.
+
+** A set of predefined settings for evaluations.
+
+** Introduction of a Match ID for simple and convinient exchange of positions.
+
+** Import from BKG and TMG formats.
+
+** Export in PDF, (Encapsulated) PostScript, LaTeX, HTML, plain text and PNG.
+*** export settings dialog available from Settings->Export
+   (warning: only html export uses some of the options).
+
+** New dice generators:
+*** random.org
+*** Blum, Blum and Shub
+
+** Manual browser added (requires GTK+ 2.0 or newer).
+
+** Message window added.
+
+** Sounds added.
+
+** Board designs added.
+
+** Player records added.
+
+** Internationali[sz]ation.
+
+** Distribution of rolls
+
+** Chequer movement: click bearoff tray for gready bearoff or for showing
+   forced move.
+
+* Changes in GNU Backgammon 0.12
+
+** Various bug fixes.
+
+** Cubeful rollouts added.
+
+** Revised chequer moving interface (both while playing and in edit mode).
+
+** Added chequer animation option.
+
+** gnubg now offers resignations when its position is hopeless.
+
+** "eq2mwc" and "mwc2eq" commands added.
+
+** Importing of .mat, .sgg and FIBS "oldmoves" files added.
+
+** Exporting to LaTeX, PostScript and PDF format added.
+
+** Add a variant rule which forbids more than 5 chequers on a point.
+
+** Added command line options `-c' (--command) and `-s' (--script).
+
+* Changes in GNU Backgammon 0.11
+
+** Various bug fixes.
+
+** Reduced 2-ply searching improved.
+
+** Support matches up to length 64, for all match equity tables.
+
+** Annotation (analysis, commentary and statistics) features added.
+
+** Various buttons (take, drop, double, roll, etc.) added to the GTK+ board.
+
+** New Guile primitives: classify-position, evaluate-position-cubeful,
+game-state, menu-bar.
+
+** Optional point number labels added to the GTK+ board.
+
+** Random number seeds for rollouts may now be specified.
+
+* Changes in GNU Backgammon 0.10
+
+** Man page added.
+
+** Import and export of position databases added.
+
+** "set output" and "set training" commands added.
+
+** External players (where moves are read from a socket to another process)
+added.
+
+** Importing of JF ".pos" position files added.
+
+** Added Guile support, if Guile is available.
+
+** Allow "=n" notation for moves (e.g. "eval =1" evaluates the position
+after gnubg's first choice move is played; "rollout =1 =3" rolls out the
+best and 3rd best moves).
+
+** Generate an in-memory heuristic bearoff database if it can't be read
+from the filesystem.
+
+** .SGF format support for loading and saving added.
+
+** Added game and match navigation: use `next' and `previous' commands,
+or equivalent buttons in game window.
+
+** Cubeful evaluation added.
+
+** You can now load and save settings, and specify startup commands in a
+~/.gnubgrc file.
+
+** Added GTK+ port, and many associated features.
+
+** MD5 dice generation added.
+
+** Added command line options `-d' (--datadir), `-b' (--no-bearoff),
+`-r' (--no-rc) and `-w' (--window-system-only).
+
+** Reduced searches added.
+
+** "!" shell escapes added.
+
+** Allow finer grained "set evaluation" commands (rollouts, each player,
+and "eval"/"hint" use separate settings).
+
+** Added Nackgammon option.
+
+** Clicking on the cube in the board window is equivalent to the command
+"double".
+
+** The board window now gives better feedback about any move (if the move
+is a partial or complete legal move, it is displayed, otherwise "Illegal move"
+is shown).  Chequers may be moved around without restriction, and all legal
+moves will be recognised.
+
+** The player names now default to the user's login name and "gnubg".
+
+** Added --no-weights option to disable reading weights files.  Generate
+and use binary weight files if available.
+
+** Optional automatic bearoffs in non-contact positions ("set autobearoff").
+
+** Match and session play has been added, along with support for the
+Crawford and Jacoby rules, and automatic doubles.
+
+** The position ID is now displayed in board window.
+
+** Allow alternate style of moving chequers in board window with mouse
+buttons 2 and 3.
+
+** Added support for other dice generators ("set rng").
+
+** Many miscellaneous commands implemented.
+
+** More bug fixes.
+
+* Changes in GNU Backgammon 0.02
+
+** Bug fixes (10225, 10227).
+
+** Added --tty option to disable X operation, and made
+everything fall back to TTY if X fails.
+
+** Now reads weights and bearoff database from $pkgdatadir (defaults to
+/usr/local/share/gnubg/) if not found in current directory.
+
+** Started implementation of supervised training (only enabled if gdbm is
+available).  See "help database".
+
+* Changes in GNU Backgammon 0.01
+
+** Bug fixes (100110, 100113, 100114, 100115, 100118, 100122, 100150).
+
+** Rudimentary X window system support.
+
+* GNU Backgammon 0.0
+
+** Initial release.
+
+Local Variables:
+mode: outline
+End:

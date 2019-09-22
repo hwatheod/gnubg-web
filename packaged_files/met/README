@@ -1,0 +1,20 @@
+This directory contains 
+
+* XML files with match equity tables for use with GNU Backgammon. You may
+  add your own for use with GNU Backgammon. If you think your table has
+  public interest and you would like to have it included in the GNU Backgammon
+  distribution, please mail it to <bug-gnubg@gnu.org>.
+
+* the Document Type Definition (DTD) for the match equity tables (met.dtd),
+
+* a stylesheet file for converting match equity XML files to HTML files;
+
+  The style sheet (met.xsl) can be used to convert the match equity XML files
+  to HTML with any XSLT processor, for example xsltproc from the libxml2 
+  package:
+
+  % xsltproc -o woolsey.html met.xsl woolsey.xml 
+
+
+
+$Id: README,v 1.1 2002/03/10 17:18:27 thyssen Exp $

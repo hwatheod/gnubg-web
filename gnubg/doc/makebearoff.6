@@ -1,0 +1,118 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.ad l
+.nh
+.TH MAKEBEAROFF 6 "2006-01-15"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+makebearoff \- generate a GNU Backgammon bearoff database
+.SH SYNOPSIS
+\fBmakebearoff\fR
+[\fB\-HCcgnvh\fR]
+\fB\-f\fR \fIfilename\fR
+[\fB\-t\fR \fIP\fRx\fIC\fR]
+[\fB\-o\fR \fIP\fR]
+[\fB\-s\fR \fIcache-size\fR]
+[\fB\-O\fR \fIfilename\fR]
+.SH DESCRIPTION
+.B makebearoff
+generates GNU Backgammon bearoff databases, which are used to improve play
+in the endgame.  It can generate either two-sided (exact) databases that
+tell precisely the chance of winning or one-sided (approximate) databases
+that provide a variety of probabilities looking at each side
+independently.
+.PP
+Bearoff databases can get quite large and can take a significant amount of
+time to generate for large numbers of chequers and/or points.
+.SH OPTIONS
+.TP
+\fB\-f\fR \fIfilename\fR, \fB\-\-outfile\fR \fIfilename\fR
+Write the bearoff database to
+.IR filename .
+This option must be given.
+.TP
+\fB\-t\fR \fIP\fRx\fIC\fR, \fB\-\-two\-sided \fIP\fRx\fIC\fR
+Generate a two-sided bearoff database for
+.I P
+points and
+.I C
+chequers for each player.  Be warned that the size of the database grows
+rapidly with larger numbers of points and chequers.
+.TP
+\fB\-o\fR \fIP\fR, \fB\-\-one\-sided\fR \fIP\fR
+Generate a one-sided bearoff database for
+.I P
+points.  One-sided bearoff databases are always generated for up to
+fifteen chequers.
+.TP
+\fB\-s\fR \fIN\fR, \fB\-\-xhash\-size\fR \fIN\fR
+Use a memory cache of size
+.I N
+while building the database.  If the cache is smaller than the database
+size, database generation will be slower due to disk writes.
+.TP
+\fB\-O\fR \fIfilename\fR, \fB\-\-old\-bearoff\fR \fIfilename\fR
+Reuse an already generated bearoff database.  Any needed data already in
+this database will just be copied without regenerating it.
+.TP
+.BR \-H ", " \-\-no\-header
+Do not write the normal bearoff database header.
+.TP
+.BR \-C ", " \-\-no\-cubeful
+Do not calculate cubeful equities for two-sided databases.
+.TP
+.BR \-c ", " \-\-no\-compress
+Do not compress one-sided databases.
+.TP
+.BR \-g ", " \-\-no\-gammons
+Do not include gammon distributions in one-sided databases.
+.TP
+.BR \-n ", " \-\-normal\-dist
+Rather than storing exact probabilities, approximate probabilities in a
+one-sided database with a normal distribution.
+.TP
+.BR \-v ", " \-\-version
+Show version information and exit.
+.TP
+.BR \-h ", " \-\-help
+Display usage and exit.
+.SH EXAMPLES
+To generate a two-sided database for up to eight chequers on six points:
+.sp 1
+.nf
+    makebearoff \-t 6x8 \-f gnubg_ts.bd
+.fi
+.sp 1
+Note that this database is 72MB in size.  To generate a one-sided database
+for up to fifteen chequers on ten points:
+.sp 1
+.nf
+    makebearoff \-o 10 \-f gnubg_os.bd
+.fi
+.sp 1
+Note that this database is 118MB in size.
+.SH SEE ALSO
+.IR gnubg (6),
+.IR bearoffdump (6)
+.SH AUTHORS
+Joseph Heled, \[/O]ystein Johansen, J\[/o]rn Thyssen, and Gary Wong,
+with the assistance of many others <bug\-gnubg@gnu.org>.
+.PP
+This manual page was written by Russ Allbery <rra@debian.org>, for the
+Debian GNU/Linux system (but may be used by others).  It may be
+redistributed and/or modified under the terms of version 2 of the GNU
+General Public License as published by the Free Software Foundation (the
+same license as GNU Backgammon).

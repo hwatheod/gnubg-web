@@ -1,0 +1,81 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.ad l
+.nh
+.TH MAKEHYPER 6 "2015-04-12"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+makehyper \- generate a GNU Backgammon Hypergammon position database
+.SH SYNOPSIS
+\fBmakehyper\fR
+[\fB\-nvh\fR]
+[\fB\-f\fR \fIfilename\fR]
+[\fB\-r\fR \fIfilename\fR]
+[\fB\-c\fR \fIchequers\fR]
+[\fB\-t\fR \fIthreshold\fR]
+.SH DESCRIPTION
+Hypergammon is a variation of backgammon with a much reduced number of
+chequers (usually three).  It's possible to fully analyse this simplified
+game and generate a database of position evaluations in order to play
+perfectly.
+.B makehyper
+generates such a position evaluation database.
+.PP
+Since many of the positions are in contact, it's not possible to generate
+the database in one pass; instead,
+.B makehyper
+iterates until the position evaluation converges.  The convergence
+threshold can be changed with the
+.B \-t
+option.
+.SH OPTIONS
+.TP
+\fB\-f\fR \fIfilename\fR, \fB\-\-outfile\fR \fIfilename\fR
+Write the hypergammon database to
+.IR filename .
+Default is "hyper<number of chequers>.bd", the name expected by
+GNU Backgammon when using the database.
+.TP
+\fB\-r\fR \fIfilename\fR, \fB\-\-restart\fR \fIfilename\fR
+Restart calculation of the database from the given file, which should be a
+checkpoint from an earlier run.
+.TP
+\fB\-c\fR \fIchequers\fR, \fB\-\-chequers\fR \fIchequers\fR
+Set the number of chequers in the game.  The default is 3, for normal
+3-chequer hypergammon.
+.TP
+.BR \-n ", " \-\-no\-checkpoint
+Do not write a checkpoint file after each iteration.
+.TP
+\fB\-t\fR \fIthreshold\fR, \fB\-\-threshold\fR \fIthreshold\fR
+Set the convergence threshold.  The default is 1e-5.
+.TP
+.BR \-v ", " \-\-version
+Show version information and exit.
+.TP
+.BR \-h ", " \-\-help
+Display usage and exit.
+.SH SEE ALSO
+.IR gnubg (6)
+.SH AUTHORS
+Joseph Heled, \[/O]ystein Johansen, J\[/o]rn Thyssen, and Gary Wong,
+with the assistance of many others <bug\-gnubg@gnu.org>.
+.PP
+This manual page was written by Russ Allbery <rra@debian.org>, for the
+Debian GNU/Linux system (but may be used by others).  It may be
+redistributed and/or modified under the terms of version 2 of the GNU
+General Public License as published by the Free Software Foundation (the
+same license as GNU Backgammon).

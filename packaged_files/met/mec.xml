@@ -1,0 +1,50 @@
+<?xml version = "1.0"?>
+<!DOCTYPE met PUBLIC "-//GNU Backgammon//DTD Match Equity Tables//EN" 
+                     "met.dtd">
+
+<!--
+
+     mec.xml
+
+     by Joern Thyssen <jthyssen@dk.ibm.com>, 2002
+
+     This file is distributed as a part of the GNU Backgammon program.
+
+     Copying and distribution of verbatim and modified versions of this file
+     is permitted in any medium provided the copyright notice and this
+     permission notice are preserved.
+
+     $Id: mec.xml,v 1.2 2004/04/16 20:17:13 thyssen Exp $
+
+ -->
+
+
+<met>
+   <info>
+      <name>mec (match equity calculator)</name>
+      <description>mec - match equity calculator for backgammon by Claes Tornberg</description>
+      <length>-1</length>
+   </info>
+
+   <pre-crawford-table type="mec">
+
+      <parameters>
+         <parameter name="gammon-rate">0.26</parameter>
+         <parameter name="win-rate">0.5</parameter>
+      </parameters>
+
+   </pre-crawford-table>      
+ 
+
+   <post-crawford-table type="mec" player="both">
+
+      <parameters>
+         <parameter name="gammon-rate">0.26</parameter>
+         <parameter name="win-rate">0.5</parameter>
+         <parameter name="free-drop-2-away">0.015</parameter>
+         <parameter name="free-drop-4-away">0.004</parameter>
+      </parameters>
+
+   </post-crawford-table>   
+
+</met>

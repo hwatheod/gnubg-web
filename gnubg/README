@@ -1,0 +1,79 @@
+GNU Backgammon version 1.00.0
+
+GNU Backgammon is developed under the GNU General Public License (GPL)
+and it's part of the GNU project. If you want to know more about GPL
+and the Free Software Foundation you can visit the FSF website. The
+conditions for copying may be found in the FILE `COPYING`
+
+Look for news and releases of GNU Backgammon at
+http://www.gnubg.org. Here you will also find ways to report bugs and
+give suggestions.
+
+For instructions on how to build gnubg, please read the file `INSTALL'
+and the other sections in this file; for other information, please see
+the GNU Backgammon manual in the `doc' directory.
+
+Introduction =========== GNU Backgammon (gnubg) plays and analyzes
+backgammon games and matches. It is able to play and analyze both
+money games and tournament matches, evaluate and roll out positions,
+and more. Driven by a command-line interface, it displays an ASCII
+rendering of a board on text-only terminals, but also allows the user
+to play games and manipulate positions with a graphical GTK+
+interface. GNU Backgammon is extensible on platforms which support
+Python.
+
+GNU Backgammon is a world class opponent and rates at around 2200 on
+FIBS, the First Internet Backgammon Server - at its best, it is in the
+top 5 of over 6000 rated players there). GNU Backgammon can be played
+on numerous other on-line backgammon servers.
+
+The following features can be found in the current release of GNU
+Backgammon.
+
+* A command line interface (with full command editing features if GNU
+  readline is available) that lets you play matches and sessions
+  against GNU Backgammon with a rough ASCII representation of the
+  board on text terminals.
+
+* Support for a GTK+ interface with a graphical board window. Both 2D
+  and 3D graphics are available.
+
+* Tournament match and money session cube handling and cubeful
+  play. All governed by an underlying cubeless money game based
+  neuralnet.
+
+* Support for both 1-sided and 2-sided bearoff databases: 1-sided
+  bearoff database for 15 checkers on the first 6 points and optional
+  2-sided database kept in memory. Optional larger 1-sided and 2-sided
+  databases stored on disk.
+
+* Automated rollouts of positions, with lookahead and race variance
+  reduction where appropriate. Rollouts may be extended.
+
+* Automatic and manual annotation (analysis and commentary) of games
+  and matches.
+
+* Record keeping of statistics of players in games and matches (both
+  native inside GNU Backgammon and externally using relational
+  databases and Python).
+
+* Loading and saving analyzed games and matches as .sgf files (Smart
+  Game Format).
+
+* Exporting positions, games and matches to: (.eps) Encapsulated
+  Postscript, (.gam) Jellyfish Game, (.html) HTML, (.mat) Jellyfish
+  Match, (.pdf) PDF, (.png) Portable Network Graphics, (.pos)
+  Jellyfish Position, (.ps) PostScript, (.sgf) Gnu Backgammon File,
+  (.tex) LaTeX, (.txt) Plain Text, (.txt) Snowie Text
+
+* Import of matches and positions from a number of file formats:
+  (.gam) GammonEmpire Game, (.gam) PartyGammon Game, (.mat) Jellyfish
+  Match, (.pos) Jellyfish Position, (.sgf) Gnu Backgammon File, (.sgg)
+  GamesGrid Save Game, (.tmg) TrueMoneyGames, (.txt) Snowie Text
+
+* Python Scripting ability.
+
+* Native language support; 13 languages complete or in progress:
+  cs_CZ, da_DK, en_GB, en_US, fr_FR, de_DE, is_IS, it_IT, ja_JP,
+  ro_RO, ru_RU, es_ES and tr_TR
+

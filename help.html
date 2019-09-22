@@ -1,0 +1,44 @@
+<html>
+<meta charset="UTF-8">
+<h1>Getting started</h1>
+To get started, click on "New money session" or "New match".  For the latter, you will be prompted for the match length.
+<br><br>
+When it's your turn, if you can double, then you will need to click "Roll" or "Double".  Otherwise, the dice will be rolled for you
+automatically.
+<br><br>
+For now, moves must be entered manually in the box labelled "Move or gnubg command".  Moves are entered in standard
+backgammon notation, e.g., 8/5 6/5. 
+<br>
+You don't need to indicate hits with a *.  Bar may be entered as "bar" or "b",
+and when bearing off, the target may be "off" or "0".
+<br><br>
+If the computer doubles you, a cube with the new value will appear in the middle of the right side of the board.
+You should click "Accept", "Reject", or "Beaver" (no beavers in a match).
+<br><br>
+If the computer offers a resignation, a flag will appear with the value that the computer is offering (1=single, 2=gammon,
+3=backgammon). You should click "Accept" or "Reject".
+<br><br>
+The bottom of the screen shows the logs from GNU Backgammon, but for normal play, you should not need to look at it.
+
+<h1>More advanced GNU Backgammon commands</h1>
+Nearly all GNU Backgammon commands work in this web version.  Type "help" in the command box to get a complete list.
+<br><br>
+If the command produces output, like "hint" or "eval", it will be shown in the logs at the bottom of the screen.
+<br><br>
+Some commands may take a long time, like "analyze" or (especially) "rollout".  It is not recommended to do rollouts
+ with this web interface, although technically it works.  
+<br>
+You will not be able to interrupt a long command, and that tab in your browser will be frozen while it runs.
+<br>You'll know the command is complete when you see the command appear in the logs at the bottom of the screen (e.g. as "=> analyze match").
+<br>Your browser may detect a long-running task and offer to 
+ let you interrupt it.  But if you interrupt from the browser, your session will be lost and you'll need to reload 
+ the page and start over.
+<br><br>
+Importing and exporting files are a 2-step process:
+<br><br>
+To export, first type the gnubg export command, for example "export game gam mygame.gam".  
+<br>Then, download the file to your local machine by clicking "Download" and entering
+ the name of the file (in this case mygame.gam).
+<br><br>
+To import, first click "Upload" and select the file from your local machine, then type the appropriate gnubg import command.
+</html>

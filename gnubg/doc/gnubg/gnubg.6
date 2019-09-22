@@ -1,0 +1,54 @@
+'\" -*- coding: us-ascii -*-
+.if \n(.g .ds T< \\FC
+.if \n(.g .ds T> \\F[\n[.fam]]
+.de URL
+\\$2 \(la\\$1\(ra\\$3
+..
+.if \n(.g .mso www.tmac
+.TH gnubg 6 "4 August 2014" "" ""
+.SH NAME
+gnubg \- GNU Backgammon program
+.SH SYNOPSIS
+gnubg -bcdlpqrStvw [file.sgf]
+.SH DESCRIPTIONS
+GNU Backgammon \fBgnubg \fR(6)
+plays and analyzes backgammon games and matches. It is able to play and
+analyze both money games and tournament matches, evaluate and roll out
+positions, and more.
+.SH OPTIONS
+\*(T<\fB\-b, \-\-no\-bearoff\fR\*(T> Do not use bearoff database
+.PP
+\*(T<\fB\-c, \-\-commands=FILE\fR\*(T> Evaluate commands in FILE and exit
+.PP
+\*(T<\fB\-d, \-\-debug\fR\*(T> Turn on debug
+.PP
+\*(T<\fB\-l, \-\-lang=LANG\fR\*(T> Set language to LANG
+.PP
+\*(T<\fB\-p, \-\-python=FILE\fR\*(T> Evaluate Python code in FILE and exit
+.PP
+\*(T<\fB\-q, \-\-quiet\fR\*(T> Disable sound effects
+.PP
+\*(T<\fB\-r, \-\-no\-rc\fR\*(T> Do not read .gnubgrc and .gnubgautorc commands
+.PP
+\*(T<\fB\-S, \-\-splash\fR\*(T> Show gtk splash screen
+.PP
+\*(T<\fB\-t, \-\-tty\fR\*(T> Start on tty instead of using window system
+.PP
+\*(T<\fB\-v, \-\-version\fR\*(T> Show version information and exit
+.PP
+\*(T<\fB\-w, \-\-window\-system\-only\fR\*(T> Ignore tty input when using window system
+.PP
+\*(T<\fB\-D, \-\-datadir\fR\*(T> Specify location of general data
+.PP
+\*(T<\fB\-P, \-\-pkgdatadir\fR\*(T> Specify location of program specific data
+.PP
+\*(T<\fB\-O, \-\-docdir\fR\*(T> Specify location of program documentation
+.PP
+\*(T<\fB\-s, \-\-prefsdir\fR\*(T> Specify location of user's preferences directory
+.SH FILES
+\*(T<\fI~/.gnubg/gnubgautorc\fR\*(T>, \*(T<\fI~/.gnubg/gnubg.db\fR\*(T>, \*(T<\fI~/.gnubg/gnubg.gtkrc\fR\*(T>
+.SH AUTHORS
+Joseph Heled, \(/Oystein Johansen, J\(/orn Thyssen, and Gary Wong,
+with the assistance of many others. Bug reports go to <\*(T<bug\-gnubg@gnu.org\*(T>>.
+.PP
+Manual written by Christian Anthon

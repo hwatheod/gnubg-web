@@ -1,0 +1,327 @@
+<?xml version = "1.0"?>
+<!DOCTYPE met PUBLIC "-//GNU Backgammon//DTD Match Equity Tables//EN"
+                     "met.dtd">
+
+<!--
+
+     woolsey.xml
+
+     by Joern Thyssen <jthyssen@dk.ibm.com>, 2002
+
+
+     This file is distributed as a part of the GNU Backgammon program.
+
+     Copying and distribution of verbatim and modified versions of this file
+     is permitted in any medium provided the copyright notice and this
+     permission notice are preserved.
+
+     $Id: woolsey.xml,v 1.5 2002/03/23 14:01:22 thyssen Exp $
+
+ -->
+
+
+<met>
+  <info>
+    <name>Kit Woolsey</name>
+    <description>Kit Woolsey, "How to play Tournament Backgammon", GammonPress, 1993</description>
+    <length>15</length>
+  </info>
+
+  <pre-crawford-table type="explicit">
+
+    <row>
+      <me>0.50</me>
+      <me>0.70</me>
+      <me>0.75</me>
+      <me>0.83</me>
+      <me>0.85</me>
+      <me>0.90</me>
+      <me>0.91</me>
+      <me>0.94</me>
+      <me>0.95</me>
+      <me>0.97</me>
+      <me>0.97</me>
+      <me>0.98</me>
+      <me>0.98</me>
+      <me>0.99</me>
+      <me>0.99</me>
+    </row>
+
+    <row>
+      <me>0.30</me>
+      <me>0.50</me>
+      <me>0.60</me>
+      <me>0.68</me>
+      <me>0.75</me>
+      <me>0.81</me>
+      <me>0.85</me>
+      <me>0.88</me>
+      <me>0.91</me>
+      <me>0.93</me>
+      <me>0.94</me>
+      <me>0.95</me>
+      <me>0.96</me>
+      <me>0.97</me>
+      <me>0.98</me>
+    </row>
+
+    <row>
+      <me>0.25</me>
+      <me>0.40</me>
+      <me>0.50</me>
+      <me>0.59</me>
+      <me>0.66</me>
+      <me>0.71</me>
+      <me>0.76</me>
+      <me>0.80</me>
+      <me>0.84</me>
+      <me>0.87</me>
+      <me>0.90</me>
+      <me>0.92</me>
+      <me>0.94</me>
+      <me>0.95</me>
+      <me>0.96</me>
+    </row>
+
+    <row>
+      <me>0.17</me>
+      <me>0.32</me>
+      <me>0.41</me>
+      <me>0.50</me>
+      <me>0.58</me>
+      <me>0.64</me>
+      <me>0.70</me>
+      <me>0.75</me>
+      <me>0.79</me>
+      <me>0.83</me>
+      <me>0.86</me>
+      <me>0.88</me>
+      <me>0.90</me>
+      <me>0.92</me>
+      <me>0.93</me>
+    </row>
+
+    <row>
+      <me>0.15</me>
+      <me>0.25</me>
+      <me>0.34</me>
+      <me>0.42</me>
+      <me>0.50</me>
+      <me>0.57</me>
+      <me>0.63</me>
+      <me>0.68</me>
+      <me>0.73</me>
+      <me>0.77</me>
+      <me>0.81</me>
+      <me>0.84</me>
+      <me>0.87</me>
+      <me>0.89</me>
+      <me>0.90</me>
+    </row>
+    
+    <row>
+      <me>0.10</me>
+      <me>0.19</me>
+      <me>0.29</me>
+      <me>0.36</me>
+      <me>0.43</me>
+      <me>0.50</me>
+      <me>0.56</me>
+      <me>0.62</me>
+      <me>0.67</me>
+      <me>0.72</me>
+      <me>0.76</me>
+      <me>0.79</me>
+      <me>0.82</me>
+      <me>0.85</me>
+      <me>0.87</me>
+    </row>
+    
+    <row>
+      <me>0.09</me>
+      <me>0.15</me>
+      <me>0.24</me>
+      <me>0.30</me>
+      <me>0.37</me>
+      <me>0.44</me>
+      <me>0.50</me>
+      <me>0.56</me>
+      <me>0.61</me>
+      <me>0.66</me>
+      <me>0.70</me>
+      <me>0.74</me>
+      <me>0.78</me>
+      <me>0.81</me>
+      <me>0.84</me>
+    </row>
+    
+    <row>
+      <me>0.06</me>
+      <me>0.12</me>
+      <me>0.20</me>
+      <me>0.25</me>
+      <me>0.32</me>
+      <me>0.38</me>
+      <me>0.44</me>
+      <me>0.50</me>
+      <me>0.55</me>
+      <me>0.60</me>
+      <me>0.65</me>
+      <me>0.69</me>
+      <me>0.73</me>
+      <me>0.77</me>
+      <me>0.80</me>
+    </row>
+    
+    <row>
+      <me>0.05</me>
+      <me>0.09</me>
+      <me>0.16</me>
+      <me>0.21</me>
+      <me>0.27</me>
+      <me>0.33</me>
+      <me>0.39</me>
+      <me>0.45</me>
+      <me>0.50</me>
+      <me>0.55</me>
+      <me>0.60</me>
+      <me>0.64</me>
+      <me>0.68</me>
+      <me>0.72</me>
+      <me>0.76</me>
+    </row>
+    
+    <row>
+      <me>0.03</me>
+      <me>0.07</me>
+      <me>0.13</me>
+      <me>0.17</me>
+      <me>0.23</me>
+      <me>0.28</me>
+      <me>0.34</me>
+      <me>0.40</me>
+      <me>0.45</me>
+      <me>0.50</me>
+      <me>0.55</me>
+      <me>0.60</me>
+      <me>0.64</me>
+      <me>0.68</me>
+      <me>0.71</me>
+    </row>
+    
+    <row>
+      <me>0.03</me>
+      <me>0.06</me>
+      <me>0.10</me>
+      <me>0.14</me>
+      <me>0.19</me>
+      <me>0.24</me>
+      <me>0.30</me>
+      <me>0.35</me>
+      <me>0.40</me>
+      <me>0.45</me>
+      <me>0.50</me>
+      <me>0.55</me>
+      <me>0.59</me>
+      <me>0.63</me>
+      <me>0.67</me>
+    </row>
+    
+    <row>
+      <me>0.02</me>
+      <me>0.05</me>
+      <me>0.08</me>
+      <me>0.12</me>
+      <me>0.16</me>
+      <me>0.21</me>
+      <me>0.26</me>
+      <me>0.31</me>
+      <me>0.36</me>
+      <me>0.40</me>
+      <me>0.45</me>
+      <me>0.50</me>
+      <me>0.54</me>
+      <me>0.58</me>
+      <me>0.62</me>
+    </row>
+    
+    <row>
+      <me>0.02</me>
+      <me>0.04</me>
+      <me>0.06</me>
+      <me>0.10</me>
+      <me>0.13</me>
+      <me>0.18</me>
+      <me>0.22</me>
+      <me>0.27</me>
+      <me>0.32</me>
+      <me>0.36</me>
+      <me>0.41</me>
+      <me>0.46</me>
+      <me>0.50</me>
+      <me>0.54</me>
+      <me>0.58</me>
+    </row>
+    
+    <row>
+      <me>0.01</me>
+      <me>0.03</me>
+      <me>0.05</me>
+      <me>0.08</me>
+      <me>0.11</me>
+      <me>0.15</me>
+      <me>0.19</me>
+      <me>0.23</me>
+      <me>0.28</me>
+      <me>0.32</me>
+      <me>0.37</me>
+      <me>0.42</me>
+      <me>0.46</me>
+      <me>0.50</me>
+      <me>0.54</me>
+    </row>
+    
+    <row>
+      <me>0.01</me>
+      <me>0.02</me>
+      <me>0.04</me>
+      <me>0.07</me>
+      <me>0.10</me>
+      <me>0.13</me>
+      <me>0.16</me>
+      <me>0.20</me>
+      <me>0.24</me>
+      <me>0.29</me>
+      <me>0.33</me>
+      <me>0.38</me>
+      <me>0.42</me>
+      <me>0.46</me>
+      <me>0.50</me>
+    </row>
+
+  </pre-crawford-table>      
+  
+
+  <post-crawford-table type="explicit" player="both">
+
+    <row>
+      <me>0.50</me>
+      <me>0.485</me>
+      <me>0.30</me>
+      <me>0.296</me>
+      <me>0.18</me>
+      <me>0.18</me>
+      <me>0.10</me>
+      <me>0.10</me>
+      <me>0.06</me>
+      <me>0.06</me>
+      <me>0.04</me>
+      <me>0.04</me>
+      <me>0.02</me>
+      <me>0.02</me>
+      <me>0.01</me>
+    </row>
+
+  </post-crawford-table>   
+
+</met>

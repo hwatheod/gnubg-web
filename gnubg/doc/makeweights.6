@@ -1,0 +1,53 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.ad l
+.nh
+.TH MAKEWEIGHTS 6 "2008-02-16"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+makeweights \- generate a GNU Backgammon binary weights file
+.SH SYNOPSIS
+\fBmakeweights\fR
+[[\fB\-f\fR] \fIoutput\fR [\fIinput\fR]]
+.SH DESCRIPTION
+.B makeweights
+generates GNU Backgammon binary weights file from a text input file.  By
+default, it reads input from standard input and writes output to standard
+output, but input and output files may be specified on the command line.
+It is only of interest if you want to regenerate the \fIgnubg.wd\fR
+database from a modified \fIgnubg.weights\fR file.
+.SH OPTIONS
+.TP
+\fB\-f\fR
+This option may be given for compatibility with the options of other GNU
+Backgammon programs but is ignored.
+.SH EXAMPLES
+To generate \fIgnubg.wd\fR from \fIgnubg.weights\fR:
+.sp 1
+.nf
+    makeweights gnubg.wd gnubg.weights
+.fi
+.SH SEE ALSO
+.IR gnubg (6)
+.SH AUTHORS
+Joseph Heled, \[/O]ystein Johansen, J\[/o]rn Thyssen, and Gary Wong,
+with the assistance of many others <bug\-gnubg@gnu.org>.
+.PP
+This manual page was written by Russ Allbery <rra@debian.org>, for the
+Debian GNU/Linux system (but may be used by others).  It may be
+redistributed and/or modified under the terms of version 3 or later of the
+GNU General Public License as published by the Free Software Foundation
+(the same license as GNU Backgammon).

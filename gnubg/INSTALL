@@ -1,0 +1,57 @@
+Installation
+============
+
+Installing gnubg is rather painless through the use of the GNU autoconf
+package.  Simply untar the gnubg distribution, and run the ``configure''
+script. Then ``make´´ and then as root ``make install´´.  If you have obtained
+the distribution from the CVS repository, run ``./autogen.sh'' first.
+
+You are likely to want or need the following tools
+
+autoconf
+automake
+bison
+flex
+gcc
+libtool
+GNU make
+
+and development libraries
+
+glib2 (_Required_)
+png (_Required_)
+freetype2 (_Required_)
+
+gtk2 (GUI)
+cairo2 (graphics)
+canberra (sound)
+gtkglext (3d boards)
+readline (command line)
+python (extension)
+sqlite3 (database)
+gmp3 (better random numbers)
+
+for documentation
+texinfo
+docbook2x
+
+In most cases, configure will automatically determine everything it needs to
+know in order to compile.  However, there are a few options to ``configure'' to
+help it out, or to disable a certain feature. See ``configure --help´´ for more
+info.
+
+  --enable-simd=TYPE      enable SIMD for newer cpus(TYPE=yes,no,sse,sse2,avx 
+                          default=yes)
+  --enable-gasserts       enable g_assert debugging macros (Default disabled)
+  --disable-cputest       disable runtime SIMD CPU test (Default no)
+  --enable-threads        enable multithread support (Default enabled)
+  --with-gtk              use GTK+ 2.0 (Default if found)
+  --with-board3d          compile with 3D boards (Default if found)
+  --with-python[=PYTHON]  absolute path name of Python executable
+  --with-eval-max-threads=size
+                          define the maximum number of evaluation threads
+                          allowed: (default=48)
+  --with-default-browser=program
+                          specify the program to open URLs: (default=xdg-open,
+                          or default=sensible-browser on Debian distros)
+

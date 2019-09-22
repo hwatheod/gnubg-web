@@ -1,0 +1,144 @@
+2010-09-16  Philippe Michel  <philippe.michel7@sfr.fr>
+
+	* allabout.xml, images/m23e0471c.png: Updates remaining to do from
+	previous entry
+
+2010-05-23  Philippe Michel  <philippe.michel7@sfr.fr>
+
+	* allabout.xml: change in "Stop when STDs are small enough"
+	criterion for rollouts.
+	TODO: update images/m23e0471c.png (and use a value of 0.01 as example)
+
+2010-05-03  Philippe Michel  <philippe.michel7@sfr.fr>
+
+	* allabout.xml: mention Rockwell-Kazaross as the choice MET
+
+Mon May 10 22:39:53 CEST 2004  JOern Thyssen  <jth@gnubg.org>
+
+	* Makefile.am: add missing files to Makefile.am 
+	(reported by Adrian Bunk)
+
+Fri Apr 30 19:10:03 CEST 2004  Joern Thyssen  <jth@gnubg.org>
+
+	* bearoff.texi: add MD5 checksum for 13pt one-sided database
+	and add warning about 2 GB limit.
+
+Sun Nov 16 20:05:38 2003  Oystein Johansen  <oystein@gnubg.org>
+
+        * New files from Achim:
+	absrating.texi    faq.texi          install.texi      saving.texi
+	additional.texi   fdl.texi          intro.texi        scripting.texi
+	analyse.texi      gnubg.texi        movefilters.texi  settings.texi
+	bearoff.texi      id.texi           opening.texi      starting.texi
+	cubeful.texi      impatient.texi    playing.texi      training.texi
+	export.texi       import.texi       rules.texi        version.texi
+
+Thu Sep 25 22:45:38 2003  Oystein Johansen  <oystein@gnubg.org>
+
+        * faq.texi: Moved the Mailing list guidelined to 
+	http://www.gnubg.org/resources/mailinglist/
+
+Thu Sep 18 21:02:38 2003  Oystein Johansen  <oystein@gnubg.org>
+
+        * faq.texi: Commit Achim's file
+	* gnubg.texi: Don't include FAQ in main manual
+
+Sat Sep  6 17:04:13 2003  Joern Thyssen  <jth@gnubg.org>
+
+	* absrating.texi, *.png: add Kees' chapter on abs. ratings.
+
+Sun Jul 27 15:10:38 2003  Oystein Johansen  <oystein@gnubg.org>
+
+	* rules.texi (New file): Tom Keith's rules
+
+Sun Jun 15 11:33:38 2003  Joern Thyssen  <jth@gnubg.org>
+
+	* cubeful.texi: add new chapter on cubeful equities.
+
+Sun Apr  6 23:27:02 2003  Joern Thyssen  <jth@gnubg.org>
+
+	* bearoff.texi: update chapter on bearoff databases.
+
+Wed Jan  8 21:50:20 2003  Joern Thyssen  <jth@gnubg.org>
+
+	* bearoff.texi: update chapter to latest version of gnubg.
+
+Thu Dec 26 00:18:10 2002  Joern Thyssen  <jth@gnubg.org>
+
+	* bearoff.texi: add better size estimates for one-sided databases.
+
+Sun Dec 22 00:10:28 2002  Joern Thyssen  <jth@freeshell.org>
+
+	* bearoff.texi: add some MD5 checksums.
+
+Sun Dec 22 00:05:16 2002  Joern Thyssen  <jth@freeshell.org>
+
+	* movefilters.texi: new file
+	* gnubg.texi: add subsection on move filters.
+	* Makefile.am: new file
+
+Fri Dec 13 16:59:11 2002  Gary Wong  <gtw@gnu.org>
+
+	* Makefile.am (EXTRA_DIST): Add some necessary files.
+
+	* Makefile.am: Try to cope without gnuplot and the PBM utilities.
+
+	* bearoff.texi, gnubg.texi: Syntax changes to make TeX happy.
+
+Sat Dec  7 15:06:33 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* bearoff.texi: add MD5 sums
+	* Makefile.am: add bearoff.texi (forgotten in previous commit)
+
+Sun Nov 24 21:55:38 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* bearoff.texi: new chapter with some info about 
+	bearoff databases (draft).
+	* gnubg.texi: include new chapter.
+
+Wed Aug 14 23:39:43 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* gnubg.texi: draft for the import and export sections.
+
+Wed Aug 14 21:21:02 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* gnubg.texi: add section on match ID and position ID to the
+	new manual.
+
+Son Aug 11 18:39:19 CEST 2002  Achim Mueller <acepoint@deltacity.net>
+	* gnubg.texi: new structure of the document, starting the new 
+	manual now. Everybody is invited to add chapters or sections,
+	but please drop me a line before.
+
+Tue Jun 18 12:50:47 2002  Gary Wong  <gtw@gnu.org>
+
+	* gnubg.texi: Replace the old FAQ chapter with an @include of
+	Achim's FAQ.
+
+Mon Jun 17 19:59:25 CEST 2002  Achim Mueller <acepoint@deltacity.net>
+	* added faq.texi and faq.html
+
+Thu Mar 28 20:10:09 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* gnubg.texi: add section on position and match ID.
+
+Wed Mar 13 11:17:11 2002  Gary Wong  <gtw@research.att.com>
+
+	* Makefile.am: Add rules to generate gnubg.xml.
+
+Wed Sep 19 11:19:56 2001  Gary Wong  <gtw@research.att.com>
+
+	* gnubg.texi: Adjust documentation to suit updated mouse handling.
+
+Mon Mar 12 11:09:45 2001  Gary Wong  <gtw@research.att.com>
+
+	* annealing.gp: New file.
+
+Thu Feb 22 11:42:16 2001  Gary Wong  <gtw@research.att.com>
+
+	* gnubg.texi: More work on the manual.
+
+Thu Feb  3 16:44:07 2000  Gary Wong  <gary@cs.arizona.edu>
+
+	* gnubg.texi: Moved to doc/ directory, and Tom Keith's rules
+	included.

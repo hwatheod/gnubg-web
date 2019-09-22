@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<book>
+<article>
+<refentry id="gnubg">
+  <docinfo>
+      <author>
+        <firstname>Christian</firstname>
+        <surname>Anthon</surname>
+        <affiliation>
+          <address format="linespecific">
+            <email>christian.anthon@gmail.com</email>
+          </address>
+        </affiliation>
+      </author>
+  </docinfo>
+  <refmeta>
+    <refentrytitle>gnubg</refentrytitle>
+    <manvolnum>6</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>gnubg</refname>
+    <refpurpose>GNU Backgammon program</refpurpose>
+  </refnamediv>
+  <refsect1>
+          <title>SYNOPSIS</title>
+            gnubg -bcdlpqrStvw [file.sgf]
+    </refsect1>
+  <refsect1>
+    <title>DESCRIPTIONS</title>
+
+    <para>
+            <application moreinfo="none">GNU Backgammon</application> <citerefentry> <refentrytitle> gnubg </refentrytitle>
+                    <manvolnum>6</manvolnum> </citerefentry>
+            plays and analyses backgammon games and matches. It is able to play and
+            analyse both money games and tournament matches, evaluate and roll out
+            positions, and more.
+    </para>
+</refsect1>
+<refsect1>
+        <title>OPTIONS</title>
+        <para><option>-b, --no-bearoff</option> Do not use bearoff database</para>
+        <para><option>-c, --commands=FILE</option> Evaluate commands in FILE and exit</para>
+        <para><option>-d, --debug</option> Turn on debug</para>
+        <para><option>-l, --lang=LANG</option> Set language to LANG</para>
+        <para><option>-p, --python=FILE</option> Evaluate Python code in FILE and exit</para>
+        <para><option>-q, --quiet</option> Disable sound effects</para>
+        <para><option>-r, --no-rc</option> Do not read .gnubgrc and .gnubgautorc commands</para>
+        <para><option>-S, --splash</option> Show gtk splash screen</para>
+        <para><option>-t, --tty</option> Start on tty instead of using window system</para>
+        <para><option>-v, --version</option> Show version information and exit</para>
+        <para><option>-w, --window-system-only</option> Ignore tty input when using window system</para>
+        <para><option>-D, --datadir</option> Specify location of general data</para>
+        <para><option>-P, --pkgdatadir</option> Specify location of program specific data</para>
+        <para><option>-O, --docdir</option> Specify location of program documentation</para>
+        <para><option>-s, --prefsdir</option> Specify location of user's preferences directory</para>
+</refsect1>
+<refsect1>
+        <title>FILES</title>
+        <para><filename>~/.gnubg/gnubgautorc</filename>, <filename>~/.gnubg/gnubg.db</filename>, <filename>~/.gnubg/gnubg.gtkrc</filename></para>
+</refsect1>
+<refsect1>
+        <title>Authors</title>
+        <para>
+        Joseph Heled, Øystein Johansen, Jørn Thyssen, and Gary Wong,
+        with the assistance of many others. Bug reports go to <email>bug-gnubg@gnu.org</email>.</para>
+<para>Manual written by Christian Anthon</para>
+  </refsect1>
+</refentry>
+</article>
+</book>

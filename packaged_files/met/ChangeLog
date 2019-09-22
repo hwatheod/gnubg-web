@@ -1,0 +1,115 @@
+2013-02-10  Philippe Michel  <philippe.michel7@sfr.fr>
+
+	* Makefile.am, Kazaross-Shaw.xml, dunstan.xml : remove older
+	small tables that are less accurate subsets of Rockwell-Kazaross
+	* TODO : remove useless file
+
+2011-08-25  Michael Petch  <mpetch@capp-sysware.com>
+
+	* Kazaross-XG2.xml: new file
+	* Makefile.am: install the above
+
+2010-09-27  Philippe Michel  <philippe.michel7@sfr.fr>
+
+	* met.xsl: Tidy tables output
+
+2010-05-03  Philippe Michel  <philippe.michel7@sfr.fr>
+
+	* Rockwell-Kazaross.xml: new file
+	* Makefile.am: install the above
+
+Mon Feb 21 23:12:17 2005 Jim Segrave  <jes@jes-2.demon.nl>
+
+	* Makefile, Makefile.in, Makefile.am - fixes for catalog.xml, catalog.dtd
+
+Tue Aug 31 14:21:56 Øystein Johansen  <oystein@gnubg.org>
+
+	* dunstan.xml: new file
+	(contributed by Ian Dunstan)
+
+Fri Apr 23 18:15:56 CEST 2004  Joern Thyssen  <jth@gnubg.org>
+
+	* g7.xml: delete file
+	* g11.xml: new file
+	(contributed by Zorba)
+
+Fri Apr 16 22:08:54 CEST 2004  Joern Thyssen  <jth@gnubg.org>
+
+	* mec.c: new file; built-in support for mec
+
+Fri Mar 26 20:36:02 2004  Joern Thyssen  <jth@gnubg.org>
+
+	* snowie.xml: update post-Crawford values
+	from <URL:http://www.bkgm.com/rgb/rgb.cgi?view+809>
+
+Fri Jan  2 01:43:17 2004  Joern Thyssen  <jth@gnubg.org>
+
+	* g7.xml: new file.
+
+Mon Dec 15 23:22:37 2003  Joern Thyssen  <jth@gnubg.org>
+
+	* Kazaross-Shaw.xml: updated to 5 points.
+
+Sun Dec 14 12:43:25 2003  Joern Thyssen  <jth@gnubg.org>
+
+	* met26.xml: s/Thornberg/Tornberg/g
+
+Sun Oct 26 19:50:35 2003  Joern Thyssen  <jth@gnubg.org>
+
+	* Kazaross-Shaw.xml: updated to 4 points.
+
+Thu Aug 28 16:35:01 2003  Joseph Heled  <pepster@users.sourceforge.net>
+
+	* mec26.xml: new file.
+
+Thu Jul  3 15:17:25 2003  Oystein Johansen  <oystein@gnubg.org>
+
+        * Kazaross-Shaw.xml: new file. Table based on rollouts
+	This file is still work in progress and should not be used for
+	anaysis or playing.
+
+Fri Apr 19 18:32:25 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* jac100.xml: new file. Jacobs & Trice met for players that
+	differ by 100 ELO rating points.
+	[Credits to CTCampbell for typing in MET]
+
+Wed Apr 17 02:41:37 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* jac050.xml: added equity for free drop.s
+
+Tue Apr 16 21:53:38 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* jac050.xml: new file. Jacobs & Trice met for players that
+	differ by 50 ELO rating points.
+	[Credits to CTCampbell for typing in MET]
+
+Tue Mar 26 18:06:09 2002  Øystein Johansen <oeysteij@online.no>
+
+        * ortega.xml: set encoding to iso-8859-1
+
+Sun Mar 24 18:36:09 2002  Øystein Johansen <oeysteij@online.no>
+
+        * ortega.xml: New file.
+
+Fri Mar 15 21:06:09 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* catalog, *.xml: update with new PUBLIC identifier.
+
+Thu Mar 14 20:46:37 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* catalog: new file (DTD catalog).
+
+Mon Mar 11 22:25:25 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* woolsey.xml, jacobs.xml, snowie.xml, zadeh.xml: changed
+	licensing terms.
+
+Sun Mar 10 22:35:28 2002  Joern Thyssen  <jthyssen@dk.ibm.com>
+
+	* woolsey.xml, jacobs.xml, snowie.xml: Calculate post crawford table as
+	"The trailer's equity at 1-away T-away post-Crawford can be calculated
+	as twice the equity for the 1-away S-away Crawford, where S is the
+	next odd number greater than T.". Add 1.5% for 2-away, 2-away and
+	0.4% for 2-away, 4-away.
+

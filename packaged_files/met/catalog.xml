@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD XML Catalogs V1.0//EN"
+		  "catalog.dtd">
+<!--
+     catalog.xml
+
+     by Joern Thyssen <jthyssen@dk.ibm.com>, 2002
+     converted to OASIS XML Catalog format by Ingo Macherius, 2005
+
+     This file is distributed as a part of the GNU Backgammon program.
+
+     Copying and distribution of verbatim and modified versions of this file
+     is permitted in any medium provided the copyright notice and this
+     permission notice are preserved.
+
+     $Id: catalog.xml,v 1.1 2005/02/18 16:40:58 Superfly_Jon Exp $
+-->
+
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         prefer="public">
+    <public publicId="-//GNU Backgammon//DTD Match Equity Tables//EN"
+            uri="met.dtd"/>
+</catalog>

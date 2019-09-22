@@ -1,0 +1,24 @@
+Mon Mar 15 17:56:45 2003 GMT  Jon Kinsey <Jon_Kinsey@hotmail.com>
+
+	* chequer.wav, dance.wav, double.wav, drop.wav, move.wav, take.wav:
+	Remove blank sound from end
+	* roll.wav: Removed second halve of sound
+	* gameover.wav: Note: this file appears distorted
+
+Fri Dec 13 16:08:57 2002  Gary Wong  <gtw@gnu.org>
+
+	* Makefile.am (EXTRA_DIST): Add some necessary files.
+
+Fri Sep 13 23:13:02 2002  Gary Wong  <gtw@gnu.org>
+
+	* Makefile.am: Compute the sound effects at 44kHz, and then convert
+	them to 22kHz, to minimise size while reducing aliasing.
+
+	* chequer.sco: New file.
+	
+Wed Sep 11 22:08:42 2002  Gary Wong  <gtw@research.att.com>
+
+	* dance.sco, double.sco, drop.sco, fanfare.sco, gameover.sco,
+	haere-ra.sco, matchover.sco, move.sco, resign.sco, roll.sco, take.sco, 
+	gnubg.orc, music.orc: New files.
+

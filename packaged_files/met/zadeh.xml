@@ -1,0 +1,51 @@
+<?xml version = "1.0"?>
+<!DOCTYPE met PUBLIC "-//GNU Backgammon//DTD Match Equity Tables//EN" 
+                     "met.dtd">
+
+<!--
+
+     zadeh.xml
+
+     by Joern Thyssen <jthyssen@dk.ibm.com>, 2002
+
+     This file is distributed as a part of the GNU Backgammon program.
+
+     Copying and distribution of verbatim and modified versions of this file
+     is permitted in any medium provided the copyright notice and this
+     permission notice are preserved.
+
+     $Id: zadeh.xml,v 1.4 2002/03/23 14:01:22 thyssen Exp $
+
+ -->
+
+
+<met>
+   <info>
+      <name>N. Zadeh</name>
+      <description>N. Zadeh, Management Science 23, 986 (1977)</description>
+      <length>-1</length>
+   </info>
+
+   <pre-crawford-table type="zadeh">
+
+      <parameters>
+         <parameter name="gammon-rate-leader">0.25</parameter>
+         <parameter name="gammon-rate-trailer">0.15</parameter>
+         <parameter name="delta">0.08</parameter>
+         <parameter name="delta-bar">0.06</parameter>
+      </parameters>
+
+   </pre-crawford-table>      
+ 
+
+   <post-crawford-table type="zadeh" player="both">
+
+      <parameters>
+         <parameter name="gammon-rate-trailer">0.25</parameter>
+         <parameter name="free-drop-2-away">0.015</parameter>
+         <parameter name="free-drop-4-away">0.004</parameter>
+      </parameters>
+
+   </post-crawford-table>   
+
+</met>

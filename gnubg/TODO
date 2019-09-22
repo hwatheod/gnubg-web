@@ -1,0 +1,349 @@
+$Id: TODO,v 1.302 2009/06/13 00:05:41 c_anthon Exp $
+
+People's names next to entries in this file mean they intend to work on that
+item soon.  Please contact them before working on related areas, to avoid
+duplication of effort and to make sure our changes merge easily.
+
+* Evaluations:
+** Allow different settings (e.g. search ply, candidates, tolerance) for each
+  position class.
+** Add more evaluation classes.
+*** Add a neural net to correct errors in BEAROFF1 class.
+*** Classes for bearing off against contact, back games, containment
+  positions, prime-vs-prime...
+*** Consider meta-pi scheme for using output from multiple nets.
+** Add another "eval"-like command that show the distribution of
+  equities n rolls ahead.  SW does bar graphs of this stuff; Cam Trenor
+  suggests alternative output.
+** Create multiple threads to parallelise rollouts (and evaluations?) on
+  multiprocessors.  Perhaps start remote processes? (Olivier Baur)
+** Add more statistics for rollouts, e.g.
+    number of turns on the bar, average number of forced moves
+** Add Michael Zehr's method for cube variance reduction in money games.
+** Add a cache for cubeful evaluations.
+** Joseph has weights for small (5 hidden nodes) nets, which could be
+  used for the internal evaluations of deep searches for a significant
+  speed increase.  See FindBestMoveInEval() in eval.c from fibs2html.
+** Consider making EvalEfficiency() more sophisticated.
+** Save rollouts and evaluations in moverecords, e.g., a cubeless rollout 
+  for a position.
+** Movefilters:
+*** accept=0, extra=0 is an illegal value!
+*** Improve dialog
+** Cube filters
+*** similar to move filters (jth)
+
+* Commands:
+** Add interactive rollouts.
+** Analyse games and matches.
+*** Allow re-evaluating analysis with different settings, and rollouts.
+*** Make sure cube analysis works for beavers.
+*** Use the fComputed field in statcontext (make "show statistics ..."
+  complain if not computed, disable the GTK menu items if not available).
+*** Make sure analysis works with resignations.
+*** Consider a way for analysis to mark _good_ moves (e.g. moves which are
+  flagged as errors at 0-ply but turn out to be correct at higher plies).
+*** Option "[X] update annotations if re-evaluated or rolled out", and
+  update annotations if option is selected.
+  Alternatively, update annotation if it's different from good/very good.
+*** fix logic for determining whether a double is around too-good or double
+  point.
+*** Calculate "advantage" (i.e. luck-adjusted result): ppg in game stats
+  for money; MWC in match stats for matches.  Save the results in pairwise
+  player records. (gary)
+** Finish saving positions and evaluations to databases.
+** Finish supervised training, and allow people to submit training data via
+  web.
+** Allow resuming interrupted rollouts, and extending completed rollouts.
+*** Allow saving rollouts -- see Jim Segrave's message at
+<http://mail.gnu.org/archive/html/bug-gnubg/2003-01/msg00244.html> for
+details.
+*** An option to stop a rollout once the stderr error has reached some
+    arbitrary threshold
+*** Report equivalent number of games when using variance reduction
+*** Aborted rollouts show the full number of games in outputs
+*** Implement for rollouts the same heuristics used by ComputerTurn for 
+   cube decisions
+*** Predefined rollout settings
+** Extend ParsePosition() to handle some sort of syntax like
+  [8/5 6/5] (meaning the position after that move).  FIBS boardstyle 3 output
+  might be nice, too.
+** When rolling out multiple decisions, add p-values (a la the equity
+  difference).
+** Importing and exporting:
+*** Add missing export formats (FIBS oldmoves, .sgg, .pos).
+*** Make the .mat format identical to Jellyfish (things to check:
+  beavers, resignations, "and the match"...)
+*** Check drops, beavers, resignations, implement Crawford and Jacoby etc. in
+  SGG importing.
+*** Make option to output board only for, say, very bad moves.
+*** Consider rewriting export engine into one XML exporter combined with
+  a number of XSL stylesheets. HTML/XHTML and text is a normal XSL stylesheet,
+  and PDF/PS/TeX export is XSL-FO.
+*** Improve the LaTeX, PS and PDF output:
+**** Add commands to change paper size, board magnification, and number of
+  move candidates listed in analysis. (gary)
+**** Show game and match statistics (if available) at end of game/match.
+**** Allow some option for selecting which boards to print (see the
+  "FG" SGF property).
+** Tutor mode
+*** save evaluation into pmr for doubles
+*** Warn about erroneous resignations.
+** Make the command functions return an int, instead of void; that way
+  commands which use other commands can provide sensible error handling. (gary)
+** Kit Woolsey suggests adding an option for truncated rollouts: when
+  truncating at n plies, take the mean of the (n-1) and n ply results.
+** The "play" command is broken in "load command" scripts.  Add subcommands
+  like "play game", "play match" for finer control. (gary)
+
+* TTY interface:
+** Handle "list game" and "list match".  (oysteijo)
+** Allow setting/editing commentary.
+** Show take/drop analysis.
+** Make DumpStatcontext work for money sessions.
+** Make output*() functions wrap words, and pause before scrolling (as in
+  gdb).
+
+* X interface:
+** Does anybody still use the old Xlib (Ext) interface any more?  If so,
+  perhaps they are interested in maintaining it.  If not, maybe it should
+  be deprecated and eventually removed (all the recent GUI effort has
+  concentrated on the GTK interface anyway).
+
+* GTK interface:
+** Allow copy/paste and drag & drop of the board ID in the board window.
+** Add a prompt and entry field to allow commands to be entered (replacing
+  stdin).
+** Disable the "stop" button when nothing is happening.
+** Add option to exchange the dice after a single click move has been
+  made.
+** Make sure we apply GTK styles correctly: create a GtkRcStyle; set the
+  background colour in the style and the flag indicating the background is
+  set; call gtk_widget_modify_style; unref the style.  This makes sure the
+  style will survive across theme changes.
+** Make usage() show the GDK and GTK options, if appropriate.
+** Allow the cube text colour and the border specular/shiny parameters to be 
+  changed.
+** Use a file selection widget for the socket in the player dialog.
+** Would ShowList() look better if it used a text widget?  (Wait for
+  GTK+ 2.0.)
+** Enable and disable the take/drop/redouble/agree/decline etc. buttons
+  and menu items when appropriate.
+** Make some of the information below the board optional (suggested by Jeremie 
+  Petit).  This might be possible with a vertical pane widget, but it would
+  be nice if there was a way to forbid children from being given _more_ than
+  their requested size.  This might require a subclass which overrides
+  gtk_vpaned_motion and sets paned->min_position.
+** Optionally merge the game record and annotation windows into one big
+  paned window (suggested by Jeremie Petit).
+** When a long string is displayed in the status bar, the main window
+  grows to accomodate it -- not very pretty.  A Layout or Viewport widget
+  might be able to fix this.  (Fixed under GTK+ 2.0.)
+** Make GTKDumpStatcontext check psc->fMoves, psc->fDice and psc->fCube,
+  and only output the relevant statistics.
+** Make sure copy/paste works correctly everywhere.  See
+  <http://www.freedesktop.org/standards/clipboards.txt>.  (Wait for GTK+ 2.0.)
+** The edges of the board should cast shadows.  Getting shadows on the
+  board surface is fairly easy... getting shadows on the chequers is not.
+** chequer movement
+*** right-blick bearoff tray for bearing off 4 men
+    Also, if "allow dragging to illegal points" is disabled right clicking
+    on the bearoff tray will hit the chequer in the home board.
+*** Problems with movement with dice 63, 42, or 21. 
+   See <URL:http://mail.gnu.org/archive/html/bug-gnubg/2003-05/msg00055.html>
+** Annotations: it's not possible to write to the annotation window while playing
+** Redesign some of the GUI. See mails from Albert Silver and others.
+** The "take" hint-widget is not used. Either use it, or alter the current
+"double"-widget.
+** Allow some way to specify long RNG seeds, and RNG parameters besides the
+  seed (e.g. BBS modulus, user .so file) in the GUI.
+** Make sure all the buttons in the game record window are also available
+  as main menu commands.
+** The sound setting options page isn't complete yet.
+** Show player on roll on board, e.g., dice cup, arrow, or whatever
+** Optionally show numbers based on who's on roll
+** Show resignations on board. Currently we show a white cube with a number.
+  Change this to showing, e.g., R1, or change to a white flag.
+** the Race Theory window is way too large. Where does all that white space
+  come from?
+** Extend the Race Theory window with the output from "eval" for bearoff
+  databases.
+** Temperatur maps:
+*** save window geometry
+*** add Eval button/eval settings button (like in hint-dialog)
+*** show difference histogram
+*** export to html
+*** show eval settings (i.e., remember eval settings)
+
+** Dialogs:
+*** Add buttons to the "help" window to look up the command in the manual,
+  or execute it.  Also use gtk_label_set_markup style markup in the help
+  window.
+*** Make open/save/import/export dialogs larger to accomodate very long
+  filenames *and* save the geometry)
+
+** Deprecated functions:
+  Once GTK+ 2.0 is released, remove references to the following deprecated
+functions:
+*** gdk_style_get_font
+*** gdk_style_set_font
+*** gdk_image_new_bitmap
+*** GtkText
+*** Save geometry for other windows: match statistics, hint, etc.
+
+* Bugs:
+** The erroneous commands "set player both" and "set player both evaluation"
+  give poor error messages.  szSetCommand is not always set correctly, which
+  leads to other bad errors (e.g. "set player 0 cubedecision rollout").
+** "help load sfdkljsdlf" gives a poor error message.
+** Check that calls to GTKUpdateAnnotations() are made where necessary
+  (e.g. the "annotate" commands probably should, and "set output ...").
+** The SGF loading (saving?) routines and CommandLoadCommands use
+  stdio, which restarts system calls on signals.  This means TTY interrupts
+  and the GTK `stop' button don't work. (gary)
+** There's no way to see the annotation on the opening move using the
+  TTY interface.  Changing ShowBoard() to display the starting position
+  and then the annotation might work.
+** The SGF lexer and parser are robust against illegal input, but the
+  game reading functions in sgf.c are very fragile.  They need to be
+  fixed to detect invalid saved games.
+** CommandCopy() should complain (or copy a board initialised to the
+  starting position) if no game is being played.
+** If "set turn" has been used during a game (so a player has two
+  consecutive moves), then export to .mat format saves it incorrectly.
+** Analysis with rollouts crashes under GTK.  (There are problems with the
+  rollout window -- do we really want a window in this case?)
+** FIBS oldmoves format doesn't record how many points a resignation is
+  for -- we should calculate it based on the score.
+** "help next" (and "next <tab>") are incomplete.
+** GtkTexi should try to load images from the same directory as the XML file.
+** It is possible to give some commands (e.g. "roll", "play") while in edit
+  mode, which messes things up.
+** make rollout as initial position work correctly. Currently, you have to perform
+  two rollouts (one with player 0 on roll, and another with player 1 on roll)
+  and average the two results. Instead gnubg should automagically perform both 
+  rollouts and do the averaging.
+** the move number shown when exporting positions to text or html is -1
+** the rollout window is a bit to small
+** try to eliminate dependency on pstopng and friends
+** settings analysis thresholds doesn't seem to work
+   (see http://mail.gnu.org/pipermail/bug-gnubg/2002-October/001313.html)
+  (This is working as designed.  The navigation commands are based on the
+  annotations, which are not necessarily related to the analysis at all,
+  e.g. if they were marked by a human.  Perhaps we could add more navigation
+  commands which are derived directly from the analysis, which would give
+  the behaviour the user seems to want, and allow us to implement David
+  Montgomery's suggestion of allowing negative error thresholds.)
+** ShowBoard always shows "resigns" message as the player on roll, but it
+  might have been the opponent.
+** There is an extra column in the GTK+ player record list.  I can't see
+  anything wrong with the code -- perhaps it is a GTK+ bug?  (That list
+  widget is obselete, so presumably the problem will go away when we move
+  to GTK+ 2.0.)
+** it's not possible to drag the opponents chequers back if the player
+  regret the hit; e.g., play one chequer to but the opponent on the bar. 
+  After this it's neither possible to drag the opponent's chequer back
+  nor to drag your own chequer back.
+  [2003-04-05: it's now possible to drag your own chequer back]
+** when there is both a missed double and a chequer play error, gnubg skips 
+  the chequer play error when browsing for marked decisions only
+
+* Documentation:
+** Complete the Texinfo manual.  Perhaps for now, only things that are
+  unlikely to change should be documented.
+** The GNU coding standards say: "Don't just tell the reader what each
+  feature can do -- say what jobs it is good for, and show how to use it for
+  those jobs.  Explain what is recommended usage, and what kinds of usage
+  users should avoid."
+
+* Miscellaneous:
+** Add more to http://www.gnu.org/software/gnubg/... -- perhaps pages to
+  submit training data, an online evaluator like Monte Carlo, maybe even an
+  entire game like Motif.
+** Submit something to <http://www.distributed.net/nextgen/projects.html>.
+** Allow loading and saving weights to specify binary or ASCII format (perhaps
+  load and save use binary, import and export use ASCII).
+** Think about generating huge databases for CD-ROMs (we can get 1-sided
+  databases for all chequers up to the 11 point, or 2-sided databases where
+  both players have up to 11 chequers in the home board onto a CD-ROM).
+** Add optional time rules, for tournament play when clocks are used.
+** Add more optional feature tests to "make check" -- databases, X?
+** Add import/export tests.
+** Change the fConfirm ("are you sure you want to abort the game in
+  progress") checks so that they _do_ ask when the game is over but the
+  match is still in progress, and they _don't_ ask if a game has not been
+  modified since it was last loaded/saved.
+** Handle SGF variations.
+** Allow loading/saving of compressed games/matches with zlib.
+** Make the external player handle resignation decisions.
+** Allow an option for illegal moves to be entered.
+** Allow ~ and $ escapes in filenames (use wordexp()).
+** Allow printing positions/games/matches/etc.  (More or less the same
+  as exporting to PostScript, but piped to a printing process.) (gary)
+*** Consider adding optional Ghostscript support -- Ghostscript can be
+  built as a shared library/DLL (see doc/API.htm in the Ghostscript
+  distribution).  This would allow us to print to any device that
+  Ghostscript supports, although the user would still have to figure out
+  the Ghostscript configuration.  Under MS Windows, the "mswinpr2" device
+  (see doc/Devices.htm) outputs to MS Windows printer drivers, which could
+  be useful.
+** Add statistics of won/lost games/matches to the player records. (gary)
+** Make sure the Nackgammon option works properly: record when loading/saving,
+  make sure that InitBoard during analysis gets it right, etc.  Similarly
+  for Egyptian and Jacoby.
+** If a MOVE_NORMAL is marked bad, it's not clear whether that means a
+  bad move, or a costly missed double.
+** Consider some kind of interface for recording live matches as quickly
+  as possible.  David Montgomery suggests showing a list of legal moves,
+  ordered by equity, as soon as the dice roll is entered; hopefully the
+  user will usually be able to select the top move and enter most of them
+  very quickly.  Entry of illegal moves should be possible, and it should
+  be easy to move back to correct mistakes.
+** Think about adding features which attempt to predict the time and
+  standard error of rollouts in advance (see Chuck's work). (gary)
+** Investigate more sophisticated training techniques, e.g. real
+  simulated annealing (see the GNU Scientific Library, at
+  <http://sources.redhat.com/gsl/>).
+** It would be nice if you could mark positions and moves for "Rollout later".
+One could then look through a game and mark all positions of interest, set
+the rollouts off and come back later.
+** Consider a Mozilla plug-in so that boards in generated HTML
+  can be displayed efficiently. (gary)
+** We provide access to non-deterministic dice from random.org.  Add
+  completely deterministic dice from noentropy.net as well.
+
+* Bugs believed fixed:
+** Save the results of rollouts/evaluations performed with hint during playing
+
+* Obselete or problematic ideas (probably better not to implement these):
+** Save partial input when TTY input is overwritten by an X command.
+  The best way would be to unify what GetInput does and ProcessInput,
+  with push/pop semantics for readline state.
+** Nothing handles running out of memory gracefully.  A solution
+  could be to write a malloc() wrapper that (if malloc fails) first
+  tries to free memory (e.g. flush the eval cache); if malloc still
+  doesn't succeed, then print an error message and longjmp() to the
+  main loop.  When using the GNU C library, __malloc_hook can be used
+  too (so we can intercept calls coming from Xlib, for instance).  We
+  shouldn't longjmp() out of the hook, though (it might confuse library
+  functions).
+** When using mmap()ed bearoff databases, add a signal handler for
+  SIGBUS/SIGSEGV to trap I/O errors.  Unfortunately, the semantics of
+  errors on mmap()ed regions are the most unportable that can be imagined...
+** Think about ways to improve event handling while "busy".  We could save
+  them somewhere and then use gdk_event_put() when we're ready. (gary)
+** The following two items are probably redundant once ParsePosition is
+  extended (see above).
+*** Add a command "show moves" which shows a list of legal moves, like hint
+  does, but without evaluating them.
+*** Also "add move", to add a specific move to the list (e.g.
+  "add move 8/5 6/5").
+** When 'Allow dragging to illegal input' is selected, Two consecutive Button 1
+  click will both use the 'first' dice.  (This is working as intended -- to
+  implement the opposite behaviour, see the item about exchanging dice under
+  "GTK interface".)
+
+
+Local Variables:
+mode: outline
+End:
