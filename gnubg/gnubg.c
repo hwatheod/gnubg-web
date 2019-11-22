@@ -1167,10 +1167,10 @@ ResetInterrupt(void)
     }
 }
 
+extern void
 #ifdef WEB
 EMSCRIPTEN_KEEPALIVE
 #endif
-extern void
 HandleCommand(char *sz, command * ac)
 {
 
@@ -4236,15 +4236,15 @@ get_stdin_line(void)
 }
 
 #ifdef WEB
+void
 EMSCRIPTEN_KEEPALIVE
-static void
 run_command(char * sz)
 {
   HandleCommand(sz, acTop);
 }
 
+void
 EMSCRIPTEN_KEEPALIVE
-static void
 doNextTurn() {
   if (fNextTurn) {
     NextTurn(TRUE);
@@ -4497,8 +4497,8 @@ null_debug(const gchar * UNUSED(dom), GLogLevelFlags UNUSED(logflags), const gch
 }
 
 #ifdef WEB
-EMSCRIPTEN_KEEPALIVE
 int
+EMSCRIPTEN_KEEPALIVE
 start()
 {
   int argc = 0;
