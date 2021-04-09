@@ -13,7 +13,7 @@ Instructions for building and testing:
 
 2. Execute `./build.sh` from within the gnubg_web directory.
 
-3. This will generate several files within a `build` directory.  To test the build locally, start a webserver inside the `build` directory.  If you have Python installed, a simple way is to run `python -m SimpleHTTPServer 8000` from within the `build` directory.  Then go to `http://localhost:8000/gnubg_web.html` from your browser.  Note that opening the `gnubg_web.html` file directly from your browser probably won't work, because of [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) restrictions for local files on the latest browsers.  If you really cannot get anything else to work, you can lookup how to disable such restrictions in your browser, but this is not recommended.
+3. This will generate several files within a `build` directory.  To test the build locally, start a webserver inside the `build` directory.  If you have Python 3 installed, a simple way is to run `python -m http.server 8000` from within the `build` directory. (For Python 2, use `python -m SimpleHTTPServer 8000`.) Then go to `http://localhost:8000/gnubg_web.html` from your browser.  Note that opening the `gnubg_web.html` file directly from your browser probably won't work, because of [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) restrictions for local files on the latest browsers.  If you really cannot get anything else to work, you can look up how to disable such restrictions in your browser, but this is not recommended.
 
 What has been modified from the original GNU Backgammon code?
 -------------------------------------------------------------
