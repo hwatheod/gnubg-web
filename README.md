@@ -9,7 +9,7 @@ gnubg_web is built using [Emscripten](https://emscripten.org/), which compiles t
 
 Instructions for building and testing:
 
-1. Install [Emscripten](https://emscripten.org/).  Then activate the PATH and other environment variables by running `source /path/to/emscripten/emsdk_env.sh`.  For more information on this step, see the Emscripten documentation. The latest version of Emscripten which has been tested to successfully build `gnubg_web` is 1.39.3.
+1. Install [Emscripten](https://emscripten.org/).  Then activate the PATH and other environment variables by running `source /path/to/emscripten/emsdk_env.sh`.  For more information on this step, see the Emscripten documentation. The latest version of Emscripten which has been tested to successfully build `gnubg_web` is 2.0.23.
 
 2. Execute `./build.sh` from within the gnubg_web directory.
 
