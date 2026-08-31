@@ -128,7 +128,8 @@ function highlightSelectedPoint(ctx) {
         ctx.strokeStyle = "orange";
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(barCenter, boardHeight / 2, checkerDiameter / 2 + 4, 0, 2 * Math.PI);
+        const checkerCenterVertical = boardHeight / 2 - (gapBetweenCheckers + checkerDiameter / 2);
+        ctx.arc(barCenter, checkerCenterVertical, checkerDiameter / 2 + 4, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.lineWidth = 1;
         ctx.strokeStyle = "black";
