@@ -79,6 +79,27 @@ function getPointFromCoords(x, y) {
         return "bar";
     }
 
+    // Check for "off" (bear-off) click near where off checkers are drawn.
+    // Coordinates taken from drawBoard: checkerOffHorizontal = boardWidth + doublingCubeOffset + doublingCubeSize/2
+    // player off vertical: boardHeight - doublingCubeSize - gapBetweenCheckers - checkerDiameter/2
+    var offX = boardWidth + doublingCubeOffset + doublingCubeSize / 2;
+    var playerOffY = boardHeight - doublingCubeSize - gapBetweenCheckers - checkerDiameter / 2;
+    var opponentOffY = 2 + doublingCubeSize + gapBetweenCheckers + checkerDiameter / 2;
+    var dxP = x - offX;
+    var dyP = y - playerOffY;
+    var dxO = x - offX;
+    var dyO = y - opponentOffY;
+    var hitRadius = checkerDiameter / 2 + 6; // somewhat forgiving hit area
+    if (dxP * dxP + dyP * dyP <= hitRadius * hitRadius) {
+        // return numeric 0 to indicate bear-off destination
+        return 0;
+    }
+    if (dxO * dxO + dyO * dyO <= hitRadius * hitRadius) {
+        // clicking opponent's off area shouldn't be used as player's destination,
+        // treat as null so nothing happens.
+        return null;
+    }
+
     var positions = computePointPositions();
     var half = boardHeight / 2;
     if (y < half) {

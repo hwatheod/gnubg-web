@@ -265,6 +265,9 @@ Loading, please wait...
 
       // Update server board snapshot and last draw args
       _serverBoard = board.slice(); // copy
+      // keep server-side bear-off counts so undo/rebuild can restore them correctly
+      _serverMyPiecesOff = myPiecesOff;
+      _serverOpponentPiecesOff = opponentPiecesOff;
       _lastDrawArgs = {
          matchLength: matchLength,
          myScore: myScore,
@@ -400,6 +403,8 @@ Loading, please wait...
    var _localBoardState = null;    // server board + pending local moves applied
    var pendingLocalMoves = [];     // array of strings like "8/5" or "bar/5"
    var _lastDrawArgs = null;       // store last draw args (everything after board param) so we can redraw
+   var _serverMyPiecesOff = 0;     // snapshot of server's myPiecesOff (used when rebuilding)
+   var _serverOpponentPiecesOff = 0;
    var lastSubmittedMoves = null;  // moves most recently submitted to gnubg (waiting for accept/reject)
    var lastLocalBoardBeforeSubmit = null; // snapshot of local board before last submit (for revert)
 
@@ -418,7 +423,8 @@ Loading, please wait...
       if (parts.length !== 2) return false;
       var src = parts[0];
       var dst = parseInt(parts[1], 10);
-      if (isNaN(dst) || dst < 1 || dst > 24) {
+      // allow bear-off destination "0"
+      if (isNaN(dst) || dst < 0 || dst > 24) {
          writeLog("Invalid destination: " + parts[1]);
          return false;
       }
@@ -439,20 +445,26 @@ Loading, please wait...
          return false;
       }
 
-      // Destination occupied by opponent?
-      if (boardArr[dst] < 0) {
-         if (Math.abs(boardArr[dst]) === 1) {
-            // hit: remove opponent checker to opponent bar (index 0)
-            boardArr[0] = (boardArr[0] || 0) - 1; // opponent bar counts negative
-            // set destination to 1 for player
-            boardArr[dst] = 1;
-         } else {
-            writeLog("Destination " + dst + " is blocked by opponent.");
-            return false;
-         }
+      if (dst === 0) {
+         // bear off: increment myPiecesOff in _lastDrawArgs (ensure defined)
+         if (!_lastDrawArgs) _lastDrawArgs = {};
+         _lastDrawArgs.myPiecesOff = (_lastDrawArgs.myPiecesOff || 0) + 1;
       } else {
-         // normal move: increment destination
-         boardArr[dst] = (boardArr[dst] || 0) + 1;
+         // Destination occupied by opponent?
+         if (boardArr[dst] < 0) {
+            if (Math.abs(boardArr[dst]) === 1) {
+               // hit: remove opponent checker to opponent bar (index 0)
+               boardArr[0] = (boardArr[0] || 0) - 1; // opponent bar counts negative
+               // set destination to 1 for player
+               boardArr[dst] = 1;
+            } else {
+               writeLog("Destination " + dst + " is blocked by opponent.");
+               return false;
+            }
+         } else {
+            // normal move: increment destination
+            boardArr[dst] = (boardArr[dst] || 0) + 1;
+         }
       }
 
       // decrement source
@@ -499,6 +511,10 @@ Loading, please wait...
       pendingLocalMoves.pop();
       // rebuild
       _localBoardState = _serverBoard.slice();
+      // reset myPiecesOff/opponentPiecesOff to server values before reapplying
+      if (!_lastDrawArgs) _lastDrawArgs = {};
+      _lastDrawArgs.myPiecesOff = _serverMyPiecesOff;
+      _lastDrawArgs.opponentPiecesOff = _serverOpponentPiecesOff;
       for (var i = 0; i < pendingLocalMoves.length; i++) {
          var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i]);
          if (!ok) {
