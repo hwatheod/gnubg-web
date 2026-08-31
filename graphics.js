@@ -374,7 +374,7 @@ function drawBoard(backgroundOnly,
         ctx.fillText(cubeValueToShow, cubeHorizontal + (doublingCubeSize - ctx.measureText(cubeValueToShow).width) / 2, cubeVertical + doublingCubeSize / 2 + 4);
     }
 
-    if (myPiecesOff > 0) {
+    if (myPiecesOff >= 0) {
         ctx.fillStyle = playerColor;
         var checkerOffHorizontal = boardWidth + doublingCubeOffset + doublingCubeSize / 2;
         var checkerOffVertical = boardHeight - doublingCubeSize - gapBetweenCheckers - checkerDiameter / 2;
@@ -386,7 +386,7 @@ function drawBoard(backgroundOnly,
         ctx.fillText(myPiecesOff, checkerOffHorizontal - ctx.measureText(myPiecesOff).width / 2, checkerOffVertical + 4);
     }
 
-    if (opponentPiecesOff > 0) {
+    if (opponentPiecesOff >= 0) {
         ctx.fillStyle = opponentColor;
         var checkerOffHorizontal = boardWidth + doublingCubeOffset + doublingCubeSize / 2;
         var checkerOffVertical = 2 + doublingCubeSize + gapBetweenCheckers + checkerDiameter / 2;
