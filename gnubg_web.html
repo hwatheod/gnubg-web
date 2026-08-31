@@ -77,6 +77,42 @@ Loading, please wait...
       if (str.startsWith("falling back to ArrayBuffer instantiation") || str.startsWith("wasm streaming compile failed") || str.startsWith("file packager has copied file data into memory")) { // suppress various startup messages not from gnubg, put it into console instead
          console.log(str);
       } else {
+         // If the engine reports an illegal/unparsable move, revert the last submitted local moves
+         if (str.includes("Illegal or unparsable move")) {
+            if (lastLocalBoardBeforeSubmit) {
+               _localBoardState = lastLocalBoardBeforeSubmit.slice();
+            }
+            if (lastSubmittedMoves) {
+               // restore pending moves so the user can edit/resubmit
+               pendingLocalMoves = lastSubmittedMoves.slice();
+            } else {
+               pendingLocalMoves = [];
+            }
+            lastSubmittedMoves = null;
+            lastLocalBoardBeforeSubmit = null;
+            updatePendingMovesUI();
+            // redraw the board using restored local state and last draw args (if available)
+            if (_lastDrawArgs && _localBoardState) {
+               drawBoard(false,
+                  _localBoardState,
+                  _lastDrawArgs.matchLength,
+                  _lastDrawArgs.myScore,
+                  _lastDrawArgs.opponentScore,
+                  _lastDrawArgs.turn,
+                  _lastDrawArgs.dice1,
+                  _lastDrawArgs.dice2,
+                  _lastDrawArgs.cubeValue,
+                  _lastDrawArgs.iMayDouble,
+                  _lastDrawArgs.opponentMayDouble,
+                  _lastDrawArgs.wasDoubled,
+                  _lastDrawArgs.myPiecesOff,
+                  _lastDrawArgs.opponentPiecesOff,
+                  _lastDrawArgs.crawford,
+                  _lastDrawArgs.resignationOffered,
+                  _lastDrawArgs.resignationValue);
+            }
+         }
+
          if (str.startsWith("board:") || str.includes("offers to resign")) {
             updateBoard(str);
             window.setTimeout(doNextTurn, 1000);
@@ -364,6 +400,8 @@ Loading, please wait...
    var _localBoardState = null;    // server board + pending local moves applied
    var pendingLocalMoves = [];     // array of strings like "8/5" or "bar/5"
    var _lastDrawArgs = null;       // store last draw args (everything after board param) so we can redraw
+   var lastSubmittedMoves = null;  // moves most recently submitted to gnubg (waiting for accept/reject)
+   var lastLocalBoardBeforeSubmit = null; // snapshot of local board before last submit (for revert)
 
    function updatePendingMovesUI() {
       var pendingSpan = document.getElementById("pendingMoves");
@@ -491,7 +529,10 @@ Loading, please wait...
    function submitLocalMoves() {
       if (pendingLocalMoves.length === 0) return;
       var command = pendingLocalMoves.join(" ");
-      // Clear local pending moves immediately (server will send an authoritative board)
+      // Remember what we're submitting so we can revert if server says illegal
+      lastSubmittedMoves = pendingLocalMoves.slice();
+      lastLocalBoardBeforeSubmit = _localBoardState ? _localBoardState.slice() : null;
+      // Clear the pending queue in the UI (they are now "in-flight")
       pendingLocalMoves = [];
       updatePendingMovesUI();
       // Send to gnubg (gnubgCommand will prefix "move " where appropriate)
