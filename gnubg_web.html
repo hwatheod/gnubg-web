@@ -18,6 +18,9 @@
       onclick='var filename = prompt("Enter file name to download"); download(filename);'>Download</button>
    <button id="upload" onclick="upload();">Upload</button>
    <button id="help" onclick="window.open('help.html', '_blank');">Help</button>
+   <button id="undoMove" onclick="undoLocalMove();" disabled="true">Undo move</button>
+   <button id="submitMoves" onclick="submitLocalMoves();" disabled="true">Submit moves</button>
+   <span id="pendingMoves" style="margin-left:10px;"></span>
    <br>
    <form id="command_form">
       <label for="command_text">Move or gnubg command:</label>
@@ -162,12 +165,11 @@ Loading, please wait...
                return;
             }
             if (typeof clicked === "number") {
-               // Construct move string: "bar/5" or "8/5"
-               var src = (selectedPointForMove === "bar") ? "bar" : selectedPointForMove.toString();
-               var dst = clicked.toString();
+               var src = (selectedPointForMove === "bar") ? "bar" : selectedPointForMove;
+               var dst = clicked;
                selectedPointForMove = null;
-               // Issue move command (gnubgCommand will prefix "move " where appropriate)
-               gnubgCommand(src + "/" + dst);
+               // Perform the move locally (update local board & pending moves). Do NOT send to gnubg yet.
+               performLocalMove(src, dst);            
             }
          }
       }, false);
@@ -225,23 +227,59 @@ Loading, please wait...
          lastTurn = turn;
       }
 
+      // Update server board snapshot and last draw args
+      _serverBoard = board.slice(); // copy
+      _lastDrawArgs = {
+         matchLength: matchLength,
+         myScore: myScore,
+         opponentScore: opponentScore,
+         turn: turn,
+         dice1: dice1,
+         dice2: dice2,
+         cubeValue: cubeValue,
+         iMayDouble: iMayDouble,
+         opponentMayDouble: opponentMayDouble,
+         wasDoubled: wasDoubled,
+         myPiecesOff: myPiecesOff,
+         opponentPiecesOff: opponentPiecesOff,
+         crawford: crawford,
+         resignationOffered: resignationOffered,
+         resignationValue: resignationValue
+      };
+
+      // Rebuild local board state from server board then reapply any pending local moves
+      _localBoardState = _serverBoard.slice();
+      if (pendingLocalMoves && pendingLocalMoves.length) {
+         for (var i = 0; i < pendingLocalMoves.length; i++) {
+            var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i]);
+            if (!ok) {
+               writeLog("Failed to reapply pending move " + pendingLocalMoves[i] + " to local board. Clearing pending moves.");
+               pendingLocalMoves = [];
+               updatePendingMovesUI();
+               _localBoardState = _serverBoard.slice();
+               break;
+            }
+         }
+      }
+
+      // Draw using local board state (server board plus unsubmitted local moves)
       drawBoard(false,
-         board,
-         matchLength,
-         myScore,
-         opponentScore,
-         turn,
-         dice1,
-         dice2,
-         cubeValue,
-         iMayDouble,
-         opponentMayDouble,
-         wasDoubled,
-         myPiecesOff,
-         opponentPiecesOff,
-         crawford,
-         resignationOffered,
-         resignationValue);
+         _localBoardState,
+         _lastDrawArgs.matchLength,
+         _lastDrawArgs.myScore,
+         _lastDrawArgs.opponentScore,
+         _lastDrawArgs.turn,
+         _lastDrawArgs.dice1,
+         _lastDrawArgs.dice2,
+         _lastDrawArgs.cubeValue,
+         _lastDrawArgs.iMayDouble,
+         _lastDrawArgs.opponentMayDouble,
+         _lastDrawArgs.wasDoubled,
+         _lastDrawArgs.myPiecesOff,
+         _lastDrawArgs.opponentPiecesOff,
+         _lastDrawArgs.crawford,
+         _lastDrawArgs.resignationOffered,
+         _lastDrawArgs.resignationValue);
 
       lastBoard = rawBoard;
    }
@@ -320,6 +358,146 @@ Loading, please wait...
    }
    inputBuffer = "";
    inputBufferPointer = 0;
+
+   // Local move tracking state (for click-to-move UI)
+   var _serverBoard = null;        // original board from server (array of ints)
+   var _localBoardState = null;    // server board + pending local moves applied
+   var pendingLocalMoves = [];     // array of strings like "8/5" or "bar/5"
+   var _lastDrawArgs = null;       // store last draw args (everything after board param) so we can redraw
+
+   function updatePendingMovesUI() {
+      var pendingSpan = document.getElementById("pendingMoves");
+      if (!pendingSpan) return;
+      pendingSpan.textContent = pendingLocalMoves.length ? ("Pending: " + pendingLocalMoves.join(" ")) : "";
+      document.getElementById("undoMove").disabled = (pendingLocalMoves.length === 0);
+      document.getElementById("submitMoves").disabled = (pendingLocalMoves.length === 0);
+   }
+
+   // Apply a single move string ("src/dst", src may be "bar") to a board array in-place.
+   // Returns true if applied, false if invalid (and board is not modified).
+   function applyMoveToBoard(boardArr, moveStr) {
+      var parts = moveStr.split("/");
+      if (parts.length !== 2) return false;
+      var src = parts[0];
+      var dst = parseInt(parts[1], 10);
+      if (isNaN(dst) || dst < 1 || dst > 24) {
+         writeLog("Invalid destination: " + parts[1]);
+         return false;
+      }
+      var srcIndex;
+      if (src === "bar" || src === "b") {
+         srcIndex = 25;
+      } else {
+         srcIndex = parseInt(src, 10);
+         if (isNaN(srcIndex) || srcIndex < 1 || srcIndex > 24) {
+            writeLog("Invalid source: " + src);
+            return false;
+         }
+      }
+
+      // Validate source has a player's checker
+      if (!boardArr[srcIndex] || boardArr[srcIndex] <= 0) {
+         writeLog("No player checker at source " + src);
+         return false;
+      }
+
+      // Destination occupied by opponent?
+      if (boardArr[dst] < 0) {
+         if (Math.abs(boardArr[dst]) === 1) {
+            // hit: remove opponent checker to opponent bar (index 0)
+            boardArr[0] = (boardArr[0] || 0) - 1; // opponent bar counts negative
+            // set destination to 1 for player
+            boardArr[dst] = 1;
+         } else {
+            writeLog("Destination " + dst + " is blocked by opponent.");
+            return false;
+         }
+      } else {
+         // normal move: increment destination
+         boardArr[dst] = (boardArr[dst] || 0) + 1;
+      }
+
+      // decrement source
+      boardArr[srcIndex] = boardArr[srcIndex] - 1;
+      return true;
+   }
+
+   // Perform a local move (called by click handler). Updates _localBoardState and pendingLocalMoves.
+   function performLocalMove(src, dst) {
+      if (!_localBoardState || !_serverBoard || !_lastDrawArgs) return;
+      var moveStr = ((src === "bar") ? "bar" : src.toString()) + "/" + dst.toString();
+      // Make a working copy to test apply
+      var working = _localBoardState.slice();
+      if (!applyMoveToBoard(working, moveStr)) {
+         return;
+      }
+      // Commit working board
+      _localBoardState = working;
+      pendingLocalMoves.push(moveStr);
+      updatePendingMovesUI();
+      // redraw using local board state
+      drawBoard(false,
+         _localBoardState,
+         _lastDrawArgs.matchLength,
+         _lastDrawArgs.myScore,
+         _lastDrawArgs.opponentScore,
+         _lastDrawArgs.turn,
+         _lastDrawArgs.dice1,
+         _lastDrawArgs.dice2,
+         _lastDrawArgs.cubeValue,
+         _lastDrawArgs.iMayDouble,
+         _lastDrawArgs.opponentMayDouble,
+         _lastDrawArgs.wasDoubled,
+         _lastDrawArgs.myPiecesOff,
+         _lastDrawArgs.opponentPiecesOff,
+         _lastDrawArgs.crawford,
+         _lastDrawArgs.resignationOffered,
+         _lastDrawArgs.resignationValue);
+   }
+
+   function undoLocalMove() {
+      if (pendingLocalMoves.length === 0) return;
+      // remove last move and recompute local board from server board applying remaining pending moves
+      pendingLocalMoves.pop();
+      // rebuild
+      _localBoardState = _serverBoard.slice();
+      for (var i = 0; i < pendingLocalMoves.length; i++) {
+         var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i]);
+         if (!ok) {
+            writeLog("Error reapplying move " + pendingLocalMoves[i] + " after undo.");
+         }
+      }
+      updatePendingMovesUI();
+      // redraw
+      drawBoard(false,
+         _localBoardState,
+         _lastDrawArgs.matchLength,
+         _lastDrawArgs.myScore,
+         _lastDrawArgs.opponentScore,
+         _lastDrawArgs.turn,
+         _lastDrawArgs.dice1,
+         _lastDrawArgs.dice2,
+         _lastDrawArgs.cubeValue,
+         _lastDrawArgs.iMayDouble,
+         _lastDrawArgs.opponentMayDouble,
+         _lastDrawArgs.wasDoubled,
+         _lastDrawArgs.myPiecesOff,
+         _lastDrawArgs.opponentPiecesOff,
+         _lastDrawArgs.crawford,
+         _lastDrawArgs.resignationOffered,
+         _lastDrawArgs.resignationValue);
+   }
+
+   function submitLocalMoves() {
+      if (pendingLocalMoves.length === 0) return;
+      var command = pendingLocalMoves.join(" ");
+      // Clear local pending moves immediately (server will send an authoritative board)
+      pendingLocalMoves = [];
+      updatePendingMovesUI();
+      // Send to gnubg (gnubgCommand will prefix "move " where appropriate)
+      gnubgCommand(command);
+   }
+
    var Module = {
       preRun: [
          function () {
