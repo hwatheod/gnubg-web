@@ -106,6 +106,72 @@ Loading, please wait...
 
       // draw an empty board on initial load
       drawBoard(true);
+
+      // Click-to-move support: click a point (or the bar) to select a source,
+      // then click a destination point to issue a move command (e.g. "8/5" or "bar/5").
+      // Relies on helper functions/vars in graphics.js:
+      //   getPointFromCoords(x,y), selectedPointForMove, _clickBoardState, _clickBoardTurn,
+      //   highlightSelectedPoint(ctx)
+      var backgammonBoard = document.getElementById("backgammonBoard");
+      backgammonBoard.style.cursor = "pointer";
+      backgammonBoard.addEventListener("click", function (e) {
+         // Convert event coordinates to canvas coordinates (account for CSS scaling)
+         var rect = backgammonBoard.getBoundingClientRect();
+         var scaleX = backgammonBoard.width / rect.width;
+         var scaleY = backgammonBoard.height / rect.height;
+         var x = (e.clientX - rect.left) * scaleX;
+         var y = (e.clientY - rect.top) * scaleY;
+
+         // Determine clicked point ("bar", 1..24, or null)
+         if (typeof getPointFromCoords !== "function") return;
+         var clicked = getPointFromCoords(x, y);
+
+         // Need current board state and whose turn it is
+         if (typeof _clickBoardState === "undefined" || _clickBoardState === null) return;
+         var board = _clickBoardState;
+         var turn = _clickBoardTurn;
+
+         // Selection flow:
+         //  - If nothing selected: allow selecting a source only if it's the player's checker and it's the player's turn.
+         //  - If a source is already selected: clicking a destination point issues the move.
+         if (!selectedPointForMove) {
+            if (clicked === "bar") {
+               // player's bar is in board[25] (positive values are player's)
+               if (turn === 1 && board[25] > 0) {
+                  selectedPointForMove = "bar";
+                  highlightSelectedPoint(backgammonBoard.getContext("2d"));
+               }
+            } else if (typeof clicked === "number") {
+               if (turn === 1 && board[clicked] > 0) {
+                  selectedPointForMove = clicked;
+                  highlightSelectedPoint(backgammonBoard.getContext("2d"));
+               }
+            }
+         } else {
+            // Already have a selected source
+            // Clicking the same source toggles deselect
+            if (clicked === selectedPointForMove) {
+               selectedPointForMove = null;
+               // redraw last known board to clear highlight
+               if (typeof lastBoard !== "undefined" && lastBoard !== "") updateBoard(lastBoard);
+               return;
+            }
+
+            // Only allow destination points (not bar)
+            if (clicked === "bar" || clicked === null) {
+               return;
+            }
+            if (typeof clicked === "number") {
+               // Construct move string: "bar/5" or "8/5"
+               var src = (selectedPointForMove === "bar") ? "bar" : selectedPointForMove.toString();
+               var dst = clicked.toString();
+               selectedPointForMove = null;
+               // Issue move command (gnubgCommand will prefix "move " where appropriate)
+               gnubgCommand(src + "/" + dst);
+            }
+         }
+      }, false);
+
    });
 
    lastTurn = 0;
