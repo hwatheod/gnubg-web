@@ -151,10 +151,7 @@ Loading, please wait...
       drawBoard(true);
 
       // Click-to-move support: click a point (or the bar) to select a source,
-      // then click a destination point to issue a move command (e.g. "8/5" or "bar/5").
-      // Relies on helper functions/vars in graphics.js:
-      //   getPointFromCoords(x,y), selectedPointForMove, _clickBoardState, _clickBoardTurn,
-      //   highlightSelectedPoint(ctx)
+      // then click a destination point to play a move locally.
       var backgammonBoard = document.getElementById("backgammonBoard");
       backgammonBoard.style.cursor = "pointer";
       backgammonBoard.addEventListener("click", function (e) {
@@ -434,7 +431,7 @@ Loading, please wait...
       document.getElementById("submitMoves").disabled = (pendingLocalMoves.length === 0);
    }
 
-   // Apply a single move string ("src/dst", src may be "bar") to a board array in-place.
+   // Apply a single move from src to dst (src may be "bar") to a board array in-place.
    // Returns true if applied, false if invalid (and board is not modified).
    function applyMoveToBoard(boardArr, src, dst, turn) {
       var srcIndex;
