@@ -296,7 +296,7 @@ Loading, please wait...
       _localBoardState = _serverBoard.slice();
       if (pendingLocalMoves && pendingLocalMoves.length) {
          for (var i = 0; i < pendingLocalMoves.length; i++) {
-            var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i], turn);
+            var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i][0], pendingLocalMoves[i][1], turn);
             if (!ok) {
                writeLog("Failed to reapply pending move " + pendingLocalMoves[i] + " to local board. Clearing pending moves.");
                pendingLocalMoves = [];
@@ -391,36 +391,31 @@ Loading, please wait...
    // Local move tracking state (for click-to-move UI)
    var _serverBoard = null;        // original board from server (array of ints)
    var _localBoardState = null;    // server board + pending local moves applied
-   var pendingLocalMoves = [];     // array of strings like "8/5" or "bar/5"
+   var pendingLocalMoves = [];     // array of [src, dst] like [8,5] or ["bar",5]
    var _lastDrawArgs = null;       // store last draw args (everything after board param) so we can redraw
    var _serverMyPiecesOff = 0;     // snapshot of server's myPiecesOff (used when rebuilding)
    var _serverOpponentPiecesOff = 0;
    var lastSubmittedMoves = null;  // moves most recently submitted to gnubg (waiting for accept/reject)
    var lastLocalBoardBeforeSubmit = null; // snapshot of local board before last submit (for revert)
 
-   // Convert a move string between global and player-relative coordinates
-   // For turn == -1, converts 17/20 to 8/5, and vice versa
+   // Convert a move [src, dst] in global coordinates to a moveString with player-relative coordinates.
+   // For examples, if turn == -1, converts [17, 20] to 8/5
    // Bear-off destination "0" is never changed
-   function convertMoveCoordinates(moveStr, turn) {
-      if (turn === 1) {
-         return moveStr; // no conversion needed for turn == 1
-      }
-      
-      var parts = moveStr.split("/");
-      var srcPart = parts[0];
-      var dstPart = parseInt(parts[1], 10);
+   function convertMoveCoordinates(move, turn) {      
+      var src = move[0];
+      var dst = move[1];
       
       // Don't convert bear-off destination "0"
-      if (dstPart !== 0) {
-         dstPart = (25 - dstPart).toString();
+      if (dst !== 0) {
+         dstPart = turn === 1 ? dst.toString() : (25 - dst).toString();
       } else {
          dstPart = "0";
       }
       
-      if (srcPart === "bar") {
+      if (src === "bar") {
          srcPart = "bar";
       } else {
-         srcPart = (25 - parseInt(srcPart, 10)).toString();
+         srcPart = turn === 1 ? src.toString() : (25 - src).toString();
       }
       
       return srcPart + "/" + dstPart;
@@ -430,8 +425,8 @@ Loading, please wait...
       var pendingSpan = document.getElementById("pendingMoves");
       if (!pendingSpan) return;
       
-      var displayMoves = pendingLocalMoves.map(function(moveStr) {
-         return convertMoveCoordinates(moveStr, _lastDrawArgs ? _lastDrawArgs.turn : 1);
+      var displayMoves = pendingLocalMoves.map(function(move) {
+         return convertMoveCoordinates(move, _lastDrawArgs ? _lastDrawArgs.turn : 1);
       });
       
       pendingSpan.textContent = displayMoves.length ? ("Pending: " + displayMoves.join(" ")) : "";
@@ -441,25 +436,12 @@ Loading, please wait...
 
    // Apply a single move string ("src/dst", src may be "bar") to a board array in-place.
    // Returns true if applied, false if invalid (and board is not modified).
-   function applyMoveToBoard(boardArr, moveStr, turn) {
-      var parts = moveStr.split("/");
-      if (parts.length !== 2) return false;
-      var src = parts[0];
-      var dst = parseInt(parts[1], 10);
-      // allow bear-off destination "0"
-      if (isNaN(dst) || dst < 0 || dst > 24) {
-         writeLog("Invalid destination: " + parts[1]);
-         return false;
-      }
+   function applyMoveToBoard(boardArr, src, dst, turn) {
       var srcIndex;
-      if (src === "bar" || src === "b") {
+      if (src === "bar") {
          srcIndex = (turn === 1) ? 25 : 0;
       } else {
-         srcIndex = parseInt(src, 10);
-         if (isNaN(srcIndex) || srcIndex < 1 || srcIndex > 24) {
-            writeLog("Invalid source: " + src);
-            return false;
-         }
+         srcIndex = src;
       }
 
       // Validate source has the current player's checker
@@ -514,10 +496,9 @@ Loading, please wait...
    // Perform a local move (called by click handler). Updates _localBoardState and pendingLocalMoves.
    function performLocalMove(src, dst) {
       if (!_localBoardState || !_serverBoard || !_lastDrawArgs) return;
-      var moveStr = ((src === "bar") ? "bar" : src.toString()) + "/" + dst.toString();
       // Make a working copy to test apply
       var working = _localBoardState.slice();
-      if (!applyMoveToBoard(working, moveStr, _lastDrawArgs.turn)) {
+      if (!applyMoveToBoard(working, src, dst, _lastDrawArgs.turn)) {
          // Move failed, clear selection and redraw
          selectedPointForMove = null;
          redrawBoard();
@@ -525,7 +506,7 @@ Loading, please wait...
       }
       // Commit working board
       _localBoardState = working;
-      pendingLocalMoves.push(moveStr);
+      pendingLocalMoves.push([src, dst]);
       updatePendingMovesUI();
       redrawBoard();
    }
@@ -541,7 +522,7 @@ Loading, please wait...
       _lastDrawArgs.myPiecesOff = _serverMyPiecesOff;
       _lastDrawArgs.opponentPiecesOff = _serverOpponentPiecesOff;
       for (var i = 0; i < pendingLocalMoves.length; i++) {
-         var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i], _lastDrawArgs.turn);
+         var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i][0], pendingLocalMoves[i][1], _lastDrawArgs.turn);
          if (!ok) {
             writeLog("Error reapplying move " + pendingLocalMoves[i] + " after undo.");
          }
@@ -552,8 +533,8 @@ Loading, please wait...
 
    function submitLocalMoves() {
       if (pendingLocalMoves.length === 0) return;
-      var movesToSubmit = pendingLocalMoves.map(function(moveStr) {
-         return convertMoveCoordinates(moveStr, _lastDrawArgs ? _lastDrawArgs.turn : 1);
+      var movesToSubmit = pendingLocalMoves.map(function(move) {
+         return convertMoveCoordinates(move, _lastDrawArgs ? _lastDrawArgs.turn : 1);
       });
       
       var command = movesToSubmit.join(" ");
