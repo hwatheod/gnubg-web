@@ -363,6 +363,9 @@ slice_config_init (SliceConfig *config)
 
   *config = slice_config;
 
+  // hack, otherwise on Emscripten 6.0.8 gets runtime error GSlice: assertion failed: aligned_memory == (gpointer) addr
+  config->always_malloc = TRUE;
+
   val = getenv ("G_SLICE");
   if (val != NULL)
     {
