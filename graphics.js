@@ -429,7 +429,7 @@ function drawBoard(backgroundOnly,
     if (turn == 0) {
         instructions.innerHTML = "";
     } else {
-        if (dice1 > 0) {
+        if (dice1 > 0 && !resignationOffered) {
             instructions.innerHTML = "Enter your move below";
             document.getElementById("roll").disabled = true;
             document.getElementById("double").disabled = true;
