@@ -480,6 +480,19 @@ Loading, please wait...
          return false;
       }
 
+      // Validate destination BEFORE modifying anything
+      if (dst !== 0) {
+         // Destination occupied by opponent?
+         var destSign = (turn === 1) ? -1 : 1;  // opponent's sign
+         if (boardArr[dst] * destSign > 0) {  // opponent's checker
+            if (Math.abs(boardArr[dst]) !== 1) {
+               writeLog("Destination is blocked by opponent.");
+               return false;
+            }
+         }
+      }
+
+      // All validations passed, now modify the board
       if (dst === 0) {
          // bear off: increment appropriate piecesOff in _lastDrawArgs (ensure defined)
          if (!_lastDrawArgs) _lastDrawArgs = {};
@@ -490,17 +503,14 @@ Loading, please wait...
          }
       } else {
          // Destination occupied by opponent?
-         var destSignal = (turn === 1) ? -1 : 1;  // opponent's sign
-         if (boardArr[dst] * destSignal > 0) {  // opponent's checker
+         var destSign = (turn === 1) ? -1 : 1;  // opponent's sign
+         if (boardArr[dst] * destSign > 0) {  // opponent's checker
             if (Math.abs(boardArr[dst]) === 1) {
                // hit: remove opponent checker to opponent bar
                var opponentBarIndex = (turn === 1) ? 0 : 25;
-               boardArr[opponentBarIndex] = (boardArr[opponentBarIndex] || 0) + destSignal;
+               boardArr[opponentBarIndex] = (boardArr[opponentBarIndex] || 0) + destSign;
                // set destination to player's checker
                boardArr[dst] = (turn === 1) ? 1 : -1;
-            } else {
-               writeLog("Destination is blocked by opponent.");
-               return false;
             }
          } else {
             // normal move: increment destination
@@ -520,6 +530,25 @@ Loading, please wait...
       // Make a working copy to test apply
       var working = _localBoardState.slice();
       if (!applyMoveToBoard(working, moveStr, _lastDrawArgs.turn)) {
+         // Move failed, clear selection and redraw
+         selectedPointForMove = null;
+         drawBoard(false,
+            _localBoardState,
+            _lastDrawArgs.matchLength,
+            _lastDrawArgs.myScore,
+            _lastDrawArgs.opponentScore,
+            _lastDrawArgs.turn,
+            _lastDrawArgs.dice1,
+            _lastDrawArgs.dice2,
+            _lastDrawArgs.cubeValue,
+            _lastDrawArgs.iMayDouble,
+            _lastDrawArgs.opponentMayDouble,
+            _lastDrawArgs.wasDoubled,
+            _lastDrawArgs.myPiecesOff,
+            _lastDrawArgs.opponentPiecesOff,
+            _lastDrawArgs.crawford,
+            _lastDrawArgs.resignationOffered,
+            _lastDrawArgs.resignationValue);
          return;
       }
       // Commit working board
