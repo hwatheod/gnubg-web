@@ -72,6 +72,28 @@ Loading, please wait...
       window.setTimeout(doNextTurn, 0);
    }
 
+   // Helper function to redraw the board with the current draw arguments
+   function redrawBoard() {
+      if (!_lastDrawArgs || !_localBoardState) return;
+      drawBoard(false,
+         _localBoardState,
+         _lastDrawArgs.matchLength,
+         _lastDrawArgs.myScore,
+         _lastDrawArgs.opponentScore,
+         _lastDrawArgs.turn,
+         _lastDrawArgs.dice1,
+         _lastDrawArgs.dice2,
+         _lastDrawArgs.cubeValue,
+         _lastDrawArgs.iMayDouble,
+         _lastDrawArgs.opponentMayDouble,
+         _lastDrawArgs.wasDoubled,
+         _lastDrawArgs.myPiecesOff,
+         _lastDrawArgs.opponentPiecesOff,
+         _lastDrawArgs.crawford,
+         _lastDrawArgs.resignationOffered,
+         _lastDrawArgs.resignationValue);
+   }
+
    lastLogLine = "";  // needed for stdin prompts from gnubg's GetInput function in gnubg.c
    function writeLog(str) {
       if (str.startsWith("falling back to ArrayBuffer instantiation") || str.startsWith("wasm streaming compile failed") || str.startsWith("file packager has copied file data into memory")) { // suppress various startup messages not from gnubg, put it into console instead
@@ -92,25 +114,7 @@ Loading, please wait...
             lastLocalBoardBeforeSubmit = null;
             updatePendingMovesUI();
             // redraw the board using restored local state and last draw args (if available)
-            if (_lastDrawArgs && _localBoardState) {
-               drawBoard(false,
-                  _localBoardState,
-                  _lastDrawArgs.matchLength,
-                  _lastDrawArgs.myScore,
-                  _lastDrawArgs.opponentScore,
-                  _lastDrawArgs.turn,
-                  _lastDrawArgs.dice1,
-                  _lastDrawArgs.dice2,
-                  _lastDrawArgs.cubeValue,
-                  _lastDrawArgs.iMayDouble,
-                  _lastDrawArgs.opponentMayDouble,
-                  _lastDrawArgs.wasDoubled,
-                  _lastDrawArgs.myPiecesOff,
-                  _lastDrawArgs.opponentPiecesOff,
-                  _lastDrawArgs.crawford,
-                  _lastDrawArgs.resignationOffered,
-                  _lastDrawArgs.resignationValue);
-            }
+            redrawBoard();
          }
 
          if (str.startsWith("board:") || str.includes("offers to resign")) {
@@ -304,23 +308,7 @@ Loading, please wait...
       }
 
       // Draw using local board state (server board plus unsubmitted local moves)
-      drawBoard(false,
-         _localBoardState,
-         _lastDrawArgs.matchLength,
-         _lastDrawArgs.myScore,
-         _lastDrawArgs.opponentScore,
-         _lastDrawArgs.turn,
-         _lastDrawArgs.dice1,
-         _lastDrawArgs.dice2,
-         _lastDrawArgs.cubeValue,
-         _lastDrawArgs.iMayDouble,
-         _lastDrawArgs.opponentMayDouble,
-         _lastDrawArgs.wasDoubled,
-         _lastDrawArgs.myPiecesOff,
-         _lastDrawArgs.opponentPiecesOff,
-         _lastDrawArgs.crawford,
-         _lastDrawArgs.resignationOffered,
-         _lastDrawArgs.resignationValue);
+      redrawBoard();
 
       lastBoard = rawBoard;
    }
@@ -532,47 +520,14 @@ Loading, please wait...
       if (!applyMoveToBoard(working, moveStr, _lastDrawArgs.turn)) {
          // Move failed, clear selection and redraw
          selectedPointForMove = null;
-         drawBoard(false,
-            _localBoardState,
-            _lastDrawArgs.matchLength,
-            _lastDrawArgs.myScore,
-            _lastDrawArgs.opponentScore,
-            _lastDrawArgs.turn,
-            _lastDrawArgs.dice1,
-            _lastDrawArgs.dice2,
-            _lastDrawArgs.cubeValue,
-            _lastDrawArgs.iMayDouble,
-            _lastDrawArgs.opponentMayDouble,
-            _lastDrawArgs.wasDoubled,
-            _lastDrawArgs.myPiecesOff,
-            _lastDrawArgs.opponentPiecesOff,
-            _lastDrawArgs.crawford,
-            _lastDrawArgs.resignationOffered,
-            _lastDrawArgs.resignationValue);
+         redrawBoard();
          return;
       }
       // Commit working board
       _localBoardState = working;
       pendingLocalMoves.push(moveStr);
       updatePendingMovesUI();
-      // redraw using local board state
-      drawBoard(false,
-         _localBoardState,
-         _lastDrawArgs.matchLength,
-         _lastDrawArgs.myScore,
-         _lastDrawArgs.opponentScore,
-         _lastDrawArgs.turn,
-         _lastDrawArgs.dice1,
-         _lastDrawArgs.dice2,
-         _lastDrawArgs.cubeValue,
-         _lastDrawArgs.iMayDouble,
-         _lastDrawArgs.opponentMayDouble,
-         _lastDrawArgs.wasDoubled,
-         _lastDrawArgs.myPiecesOff,
-         _lastDrawArgs.opponentPiecesOff,
-         _lastDrawArgs.crawford,
-         _lastDrawArgs.resignationOffered,
-         _lastDrawArgs.resignationValue);
+      redrawBoard();
    }
 
    function undoLocalMove() {
@@ -592,24 +547,7 @@ Loading, please wait...
          }
       }
       updatePendingMovesUI();
-      // redraw
-      drawBoard(false,
-         _localBoardState,
-         _lastDrawArgs.matchLength,
-         _lastDrawArgs.myScore,
-         _lastDrawArgs.opponentScore,
-         _lastDrawArgs.turn,
-         _lastDrawArgs.dice1,
-         _lastDrawArgs.dice2,
-         _lastDrawArgs.cubeValue,
-         _lastDrawArgs.iMayDouble,
-         _lastDrawArgs.opponentMayDouble,
-         _lastDrawArgs.wasDoubled,
-         _lastDrawArgs.myPiecesOff,
-         _lastDrawArgs.opponentPiecesOff,
-         _lastDrawArgs.crawford,
-         _lastDrawArgs.resignationOffered,
-         _lastDrawArgs.resignationValue);
+      redrawBoard();
    }
 
    function submitLocalMoves() {
