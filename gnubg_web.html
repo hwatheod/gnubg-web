@@ -175,13 +175,15 @@ Loading, please wait...
          //  - If a source is already selected: clicking a destination point issues the move.
          if (!selectedPointForMove) {
             if (clicked === "bar") {
-               // player's bar is in board[25] (positive values are player's)
-               if (turn === 1 && board[25] > 0) {
+               // Check if current player has checkers on their bar.
+               // Player 1's bar is in board[25] (positive), player -1's bar is in board[0] (negative)
+               if ((turn === 1 && board[25] > 0) || (turn === -1 && board[0] < 0)) {
                   selectedPointForMove = "bar";
                   highlightSelectedPoint(backgammonBoard.getContext("2d"));
                }
             } else if (typeof clicked === "number") {
-               if (turn === 1 && board[clicked] > 0) {
+               // For regular points, check if the sign of the checker matches the sign of turn
+               if ((turn === 1 && board[clicked] > 0) || (turn === -1 && board[clicked] < 0)) {
                   selectedPointForMove = clicked;
                   highlightSelectedPoint(backgammonBoard.getContext("2d"));
                }
@@ -290,7 +292,7 @@ Loading, please wait...
       _localBoardState = _serverBoard.slice();
       if (pendingLocalMoves && pendingLocalMoves.length) {
          for (var i = 0; i < pendingLocalMoves.length; i++) {
-            var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i]);
+            var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i], turn);
             if (!ok) {
                writeLog("Failed to reapply pending move " + pendingLocalMoves[i] + " to local board. Clearing pending moves.");
                pendingLocalMoves = [];
@@ -408,17 +410,50 @@ Loading, please wait...
    var lastSubmittedMoves = null;  // moves most recently submitted to gnubg (waiting for accept/reject)
    var lastLocalBoardBeforeSubmit = null; // snapshot of local board before last submit (for revert)
 
+   // Convert a move string between global and player-relative coordinates
+   // For turn == -1, converts 17/20 to 8/5, and vice versa
+   // Bear-off destination "0" is never changed
+   function convertMoveCoordinates(moveStr, turn) {
+      if (turn === 1) {
+         return moveStr; // no conversion needed for turn == 1
+      }
+      
+      var parts = moveStr.split("/");
+      var srcPart = parts[0];
+      var dstPart = parseInt(parts[1], 10);
+      
+      // Don't convert bear-off destination "0"
+      if (dstPart !== 0) {
+         dstPart = (25 - dstPart).toString();
+      } else {
+         dstPart = "0";
+      }
+      
+      if (srcPart === "bar") {
+         srcPart = "bar";
+      } else {
+         srcPart = (25 - parseInt(srcPart, 10)).toString();
+      }
+      
+      return srcPart + "/" + dstPart;
+   } 
+
    function updatePendingMovesUI() {
       var pendingSpan = document.getElementById("pendingMoves");
       if (!pendingSpan) return;
-      pendingSpan.textContent = pendingLocalMoves.length ? ("Pending: " + pendingLocalMoves.join(" ")) : "";
+      
+      var displayMoves = pendingLocalMoves.map(function(moveStr) {
+         return convertMoveCoordinates(moveStr, _lastDrawArgs ? _lastDrawArgs.turn : 1);
+      });
+      
+      pendingSpan.textContent = displayMoves.length ? ("Pending: " + displayMoves.join(" ")) : "";
       document.getElementById("undoMove").disabled = (pendingLocalMoves.length === 0);
       document.getElementById("submitMoves").disabled = (pendingLocalMoves.length === 0);
    }
 
    // Apply a single move string ("src/dst", src may be "bar") to a board array in-place.
    // Returns true if applied, false if invalid (and board is not modified).
-   function applyMoveToBoard(boardArr, moveStr) {
+   function applyMoveToBoard(boardArr, moveStr, turn) {
       var parts = moveStr.split("/");
       if (parts.length !== 2) return false;
       var src = parts[0];
@@ -430,7 +465,7 @@ Loading, please wait...
       }
       var srcIndex;
       if (src === "bar" || src === "b") {
-         srcIndex = 25;
+         srcIndex = (turn === 1) ? 25 : 0;
       } else {
          srcIndex = parseInt(src, 10);
          if (isNaN(srcIndex) || srcIndex < 1 || srcIndex > 24) {
@@ -439,36 +474,42 @@ Loading, please wait...
          }
       }
 
-      // Validate source has a player's checker
-      if (!boardArr[srcIndex] || boardArr[srcIndex] <= 0) {
-         writeLog("No player checker at source " + src);
+      // Validate source has the current player's checker
+      if ((turn === 1 && boardArr[srcIndex] <= 0) || (turn === -1 && boardArr[srcIndex] >= 0)) {
+         writeLog("No player checker at this position.");
          return false;
       }
 
       if (dst === 0) {
-         // bear off: increment myPiecesOff in _lastDrawArgs (ensure defined)
+         // bear off: increment appropriate piecesOff in _lastDrawArgs (ensure defined)
          if (!_lastDrawArgs) _lastDrawArgs = {};
-         _lastDrawArgs.myPiecesOff = (_lastDrawArgs.myPiecesOff || 0) + 1;
+         if (turn === 1) {
+            _lastDrawArgs.myPiecesOff = (_lastDrawArgs.myPiecesOff || 0) + 1;
+         } else {
+            _lastDrawArgs.opponentPiecesOff = (_lastDrawArgs.opponentPiecesOff || 0) + 1;
+         }
       } else {
          // Destination occupied by opponent?
-         if (boardArr[dst] < 0) {
+         var destSignal = (turn === 1) ? -1 : 1;  // opponent's sign
+         if (boardArr[dst] * destSignal > 0) {  // opponent's checker
             if (Math.abs(boardArr[dst]) === 1) {
-               // hit: remove opponent checker to opponent bar (index 0)
-               boardArr[0] = (boardArr[0] || 0) - 1; // opponent bar counts negative
-               // set destination to 1 for player
-               boardArr[dst] = 1;
+               // hit: remove opponent checker to opponent bar
+               var opponentBarIndex = (turn === 1) ? 0 : 25;
+               boardArr[opponentBarIndex] = (boardArr[opponentBarIndex] || 0) + destSignal;
+               // set destination to player's checker
+               boardArr[dst] = (turn === 1) ? 1 : -1;
             } else {
-               writeLog("Destination " + dst + " is blocked by opponent.");
+               writeLog("Destination is blocked by opponent.");
                return false;
             }
          } else {
             // normal move: increment destination
-            boardArr[dst] = (boardArr[dst] || 0) + 1;
+            boardArr[dst] = (boardArr[dst] || 0) + (turn === 1 ? 1 : -1);
          }
       }
 
       // decrement source
-      boardArr[srcIndex] = boardArr[srcIndex] - 1;
+      boardArr[srcIndex] = boardArr[srcIndex] - (turn === 1 ? 1 : -1);
       return true;
    }
 
@@ -478,7 +519,7 @@ Loading, please wait...
       var moveStr = ((src === "bar") ? "bar" : src.toString()) + "/" + dst.toString();
       // Make a working copy to test apply
       var working = _localBoardState.slice();
-      if (!applyMoveToBoard(working, moveStr)) {
+      if (!applyMoveToBoard(working, moveStr, _lastDrawArgs.turn)) {
          return;
       }
       // Commit working board
@@ -516,7 +557,7 @@ Loading, please wait...
       _lastDrawArgs.myPiecesOff = _serverMyPiecesOff;
       _lastDrawArgs.opponentPiecesOff = _serverOpponentPiecesOff;
       for (var i = 0; i < pendingLocalMoves.length; i++) {
-         var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i]);
+         var ok = applyMoveToBoard(_localBoardState, pendingLocalMoves[i], _lastDrawArgs.turn);
          if (!ok) {
             writeLog("Error reapplying move " + pendingLocalMoves[i] + " after undo.");
          }
@@ -544,7 +585,11 @@ Loading, please wait...
 
    function submitLocalMoves() {
       if (pendingLocalMoves.length === 0) return;
-      var command = pendingLocalMoves.join(" ");
+      var movesToSubmit = pendingLocalMoves.map(function(moveStr) {
+         return convertMoveCoordinates(moveStr, _lastDrawArgs ? _lastDrawArgs.turn : 1);
+      });
+      
+      var command = movesToSubmit.join(" ");
       // Remember what we're submitting so we can revert if server says illegal
       lastSubmittedMoves = pendingLocalMoves.slice();
       lastLocalBoardBeforeSubmit = _localBoardState ? _localBoardState.slice() : null;

@@ -80,24 +80,29 @@ function getPointFromCoords(x, y) {
     }
 
     // Check for "off" (bear-off) click near where off checkers are drawn.
-    // Coordinates taken from drawBoard: checkerOffHorizontal = boardWidth + doublingCubeOffset + doublingCubeSize/2
-    // player off vertical: boardHeight - doublingCubeSize - gapBetweenCheckers - checkerDiameter/2
+    // Coordinates depend on whose turn it is
     var offX = boardWidth + doublingCubeOffset + doublingCubeSize / 2;
     var playerOffY = boardHeight - doublingCubeSize - gapBetweenCheckers - checkerDiameter / 2;
     var opponentOffY = 2 + doublingCubeSize + gapBetweenCheckers + checkerDiameter / 2;
+    
+    var hitRadius = checkerDiameter / 2 + 6; // somewhat forgiving hit area
+    
+    // Check player's bear-off area
     var dxP = x - offX;
     var dyP = y - playerOffY;
+    if (dxP * dxP + dyP * dyP <= hitRadius * hitRadius) {
+        // For turn == 1, this is the player's off area (return 0)
+        // For turn == -1, this is the opponent's off area (return null)
+        return (_clickBoardTurn === 1) ? 0 : null;
+    }
+    
+    // Check opponent's bear-off area
     var dxO = x - offX;
     var dyO = y - opponentOffY;
-    var hitRadius = checkerDiameter / 2 + 6; // somewhat forgiving hit area
-    if (dxP * dxP + dyP * dyP <= hitRadius * hitRadius) {
-        // return numeric 0 to indicate bear-off destination
-        return 0;
-    }
     if (dxO * dxO + dyO * dyO <= hitRadius * hitRadius) {
-        // clicking opponent's off area shouldn't be used as player's destination,
-        // treat as null so nothing happens.
-        return null;
+        // For turn == 1, this is the opponent's off area (return null)
+        // For turn == -1, this is the player's off area (return 0)
+        return (_clickBoardTurn === -1) ? 0 : null;
     }
 
     var positions = computePointPositions();
@@ -124,11 +129,11 @@ function highlightSelectedPoint(ctx) {
     if (!selectedPointForMove) return;
     var positions = computePointPositions();
     if (selectedPointForMove === "bar") {
-        // draw a ring around the bar center
         ctx.strokeStyle = "orange";
         ctx.lineWidth = 3;
         ctx.beginPath();
-        const checkerCenterVertical = boardHeight / 2 - (gapBetweenCheckers + checkerDiameter / 2);
+        var direction = (_clickBoardTurn === 1) ? -1 : 1;
+        const checkerCenterVertical = boardHeight / 2 + direction * (gapBetweenCheckers + checkerDiameter / 2);
         ctx.arc(barCenter, checkerCenterVertical, checkerDiameter / 2 + 4, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.lineWidth = 1;
