@@ -32,6 +32,128 @@ diceVerticalStartPoint = (boardHeight - dieSize) / 2;
 playerColor = "red";
 opponentColor = "blue";
 
+// State for click-to-move UI
+selectedPointForMove = null; // number or "bar"
+// last drawn board and turn (set by drawBoard)
+_clickBoardState = null;
+_clickBoardTurn = null;
+
+// Compute x start positions for each point (1..24) using same layout as drawBoard.
+function computePointPositions() {
+    var positions = {};
+    var pointStart = gapBetweenCheckers;
+    // upper left: points 24..19
+    for (var i = 0; i < 6; i++) {
+        positions[24 - i] = pointStart;
+        pointStart += (checkerDiameter + gapBetweenCheckers);
+    }
+    // skip bar + gap
+    pointStart += (barLength + gapBetweenCheckers);
+    // upper right: points 18..13
+    for (var i = 0; i < 6; i++) {
+        positions[18 - i] = pointStart;
+        pointStart += (checkerDiameter + gapBetweenCheckers);
+    }
+
+    // lower left: points 1..6
+    pointStart = gapBetweenCheckers;
+    for (var i = 0; i < 6; i++) {
+        positions[1 + i] = pointStart;
+        pointStart += (checkerDiameter + gapBetweenCheckers);
+    }
+    // skip bar + gap
+    pointStart += (barLength + gapBetweenCheckers);
+    // lower right: points 7..12
+    for (var i = 0; i < 6; i++) {
+        positions[7 + i] = pointStart;
+        pointStart += (checkerDiameter + gapBetweenCheckers);
+    }
+    return positions;
+}
+
+// Map a canvas click (x,y) to a point number (1..24), or "bar", or null.
+function getPointFromCoords(x, y) {
+    // x,y assumed to be canvas-relative coordinates (not page coords)
+    // bar region
+    if (x >= barLeftBoundary && x <= barRightBoundary) {
+        return "bar";
+    }
+
+    // Check for "off" (bear-off) click near where off checkers are drawn.
+    // Coordinates depend on whose turn it is
+    var offX = boardWidth + doublingCubeOffset + doublingCubeSize / 2;
+    var playerOffY = boardHeight - doublingCubeSize - gapBetweenCheckers - checkerDiameter / 2;
+    var opponentOffY = 2 + doublingCubeSize + gapBetweenCheckers + checkerDiameter / 2;
+    
+    var hitRadius = checkerDiameter / 2 + 6; // somewhat forgiving hit area
+    
+    // Check player's bear-off area
+    var dxP = x - offX;
+    var dyP = y - playerOffY;
+    if (dxP * dxP + dyP * dyP <= hitRadius * hitRadius) {
+        // For turn == 1, this is the player's off area (return 0)
+        // For turn == -1, this is the opponent's off area (return null)
+        return (_clickBoardTurn === 1) ? 0 : null;
+    }
+    
+    // Check opponent's bear-off area
+    var dxO = x - offX;
+    var dyO = y - opponentOffY;
+    if (dxO * dxO + dyO * dyO <= hitRadius * hitRadius) {
+        // For turn == 1, this is the opponent's off area (return null)
+        // For turn == -1, this is the player's off area (return 0)
+        return (_clickBoardTurn === -1) ? 0 : null;
+    }
+
+    var positions = computePointPositions();
+    var half = boardHeight / 2;
+    if (y < half) {
+        // top row: points 13..24
+        for (var p = 13; p <= 24; p++) {
+            var xs = positions[p];
+            if (typeof xs === "undefined") continue;
+            if (x >= xs && x <= xs + checkerDiameter) return p;
+        }
+    } else {
+        // bottom row: points 1..12
+        for (var p = 1; p <= 12; p++) {
+            var xs = positions[p];
+            if (typeof xs === "undefined") continue;
+            if (x >= xs && x <= xs + checkerDiameter) return p;
+        }
+    }
+    return null;
+}
+
+function highlightSelectedPoint(ctx) {
+    if (!selectedPointForMove) return;
+    var positions = computePointPositions();
+    if (selectedPointForMove === "bar") {
+        ctx.strokeStyle = "orange";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        var direction = (_clickBoardTurn === 1) ? -1 : 1;
+        const checkerCenterVertical = boardHeight / 2 + direction * (gapBetweenCheckers + checkerDiameter / 2);
+        ctx.arc(barCenter, checkerCenterVertical, checkerDiameter / 2 + 4, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "black";
+        return;
+    }
+    var p = selectedPointForMove;
+    if (p < 1 || p > 24) return;
+    var xs = positions[p];
+    var direction = (p >= 13) ? 1 : -1;
+    var checkerCenterVertical = (direction == 1) ? checkerDiameter / 2 : boardHeight - checkerDiameter / 2;
+    ctx.strokeStyle = "orange";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(xs + checkerDiameter / 2, checkerCenterVertical, checkerDiameter / 2 + 4, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "black";
+}
+
 function drawCheckers(ctx, numCheckers, pointStart, direction) {
     if (numCheckers == 0) {
         return;
@@ -258,7 +380,7 @@ function drawBoard(backgroundOnly,
         ctx.fillText(cubeValueToShow, cubeHorizontal + (doublingCubeSize - ctx.measureText(cubeValueToShow).width) / 2, cubeVertical + doublingCubeSize / 2 + 4);
     }
 
-    if (myPiecesOff > 0) {
+    if (myPiecesOff >= 0) {
         ctx.fillStyle = playerColor;
         var checkerOffHorizontal = boardWidth + doublingCubeOffset + doublingCubeSize / 2;
         var checkerOffVertical = boardHeight - doublingCubeSize - gapBetweenCheckers - checkerDiameter / 2;
@@ -270,7 +392,7 @@ function drawBoard(backgroundOnly,
         ctx.fillText(myPiecesOff, checkerOffHorizontal - ctx.measureText(myPiecesOff).width / 2, checkerOffVertical + 4);
     }
 
-    if (opponentPiecesOff > 0) {
+    if (opponentPiecesOff >= 0) {
         ctx.fillStyle = opponentColor;
         var checkerOffHorizontal = boardWidth + doublingCubeOffset + doublingCubeSize / 2;
         var checkerOffVertical = 2 + doublingCubeSize + gapBetweenCheckers + checkerDiameter / 2;
@@ -307,8 +429,8 @@ function drawBoard(backgroundOnly,
     if (turn == 0) {
         instructions.innerHTML = "";
     } else {
-        if (dice1 > 0) {
-            instructions.innerHTML = "Enter your move below";
+        if (dice1 > 0 && !resignationOffered) {
+            instructions.innerHTML = "Click checkers to move";
             document.getElementById("roll").disabled = true;
             document.getElementById("double").disabled = true;
             document.getElementById("accept").disabled = true;
@@ -341,6 +463,20 @@ function drawBoard(backgroundOnly,
             document.getElementById("resign").disabled = false;
         }
     }
+
+    // store last board & turn for click handling
+    _clickBoardState = board;
+    _clickBoardTurn = turn;
+
+    // If there is a selected point, draw highlight
+    try {
+        var backgammonBoard = document.getElementById("backgammonBoard");
+        var ctx = backgammonBoard.getContext("2d");
+        highlightSelectedPoint(ctx);
+    } catch (e) {
+        // ignore if canvas not available
+    }
+
 }
 
 function intermediatePoint(a, b, t) {
